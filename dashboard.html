@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Hub | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --accent: #a855f7; --bg-dark: #0f172a; }
+        body { background: radial-gradient(circle at top right, #1e1b4b, #0f172a); color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; min-height: 100vh; }
+        
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); justify-content: center;   }
+        .glass-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.2); }
+        
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.85); }
+        #sidebar { transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 150; }
+
+        /* Perfect Slider Fit */
+        .hero-slider-container { width: 100%; aspect-ratio: 16 / 7; position: relative; border-radius: 32px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 42px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .slide { display: none; width: 100%; height: 100%; background-size: 100% 100%; background-position: center; }
+        .slide.active { display: block; animation: fadeScale 0.8s ease; }
+        @keyframes fadeScale { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* Notifications */
+        .notif-dropdown { width: 380px; background: #131c31; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: none; }
+        .notif-dropdown.show { display: block; animation: slideDown 0.3s ease forwards; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hidden-item { display: none; }
+        .meta-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Menu</h2>
+            <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="space-y-3">
+            <a href="dashboard.html" class="flex items-center p-3 rounded-xl bg-indigo-600/20 text-indigo-400 font-bold border border-indigo-500/20"><i class="fa-solid fa-chart-line w-8"></i> Dashboard</a>
+            <a href="college.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-university w-8"></i> Search College</a>
+            <a href="team.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-users-gear w-8"></i> Team Formation</a>
+            <a href="project.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-project-diagram w-8"></i> Event Management</a>
+            <a href="communication.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-comments w-8"></i> Communication</a>
+            <a href="feedback.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-message w-8 text-indigo-400"></i> Feedback</a>
+            <hr class="border-white/5 my-4">
+            <a href="profile.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-user w-8"></i> My Profile</a>
+            <button onclick="logout()" class="w-full text-left flex items-center p-3 rounded-xl hover:bg-red-600/20 transition text-rose-500"><i class="fa-solid fa-right-from-bracket w-8"></i> Logout</button>
+        </nav>
+    </div>
+
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition"><i class="fa-solid fa-bars-staggered"></i></button>
+                <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- NOTIFICATION HUB -->
+                <div class="relative">
+                    <button onclick="toggleNotif()" class="relative hover:text-indigo-400 transition">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-rose-500 w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-black">3</span>
+                    </button>
+                    <div id="notifHub" class="notif-dropdown absolute right-0 mt-4 z-[200] overflow-hidden">
+                        <div class="p-5 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                            <span class="text-xs font-black uppercase text-indigo-400 tracking-widest">Notification Center</span>
+                        </div>
+                        <div class="max-h-[450px] overflow-y-auto">
+                            <!-- Team Request -->
+                            <div class="p-4 border-b border-white/5 hover:bg-white/5 transition flex gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-purple-400"><i class="fa-solid fa-users-rays"></i></div>
+                                <div class="flex-1">
+                                    <p class="text-xs"><b>Alpha Squad</b> sent a team invite for <i>SIH 2024</i>.</p>
+                                    <div class="flex gap-2 mt-2"><button class="bg-indigo-600 px-3 py-1 rounded text-[9px] font-bold">Accept</button><button class="bg-white/5 px-3 py-1 rounded text-[9px] font-bold">Reject</button></div>
+                                </div>
+                            </div>
+                            <!-- Connection Request -->
+                            <div class="p-4 border-b border-white/5 hover:bg-white/5 transition flex gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">P</div>
+                                <div class="flex-1">
+                                    <p class="text-xs"><b>Priya Sharma</b> wants to connect.</p>
+                                    <p class="text-[9px] text-slate-500">IIT Delhi • B.Tech</p>
+                                </div>
+                            </div>
+                            <!-- Event Alert -->
+                            <div class="p-4 border-b border-white/5 hover:bg-white/5 transition flex gap-3 text-emerald-400">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-600/20 flex items-center justify-center"><i class="fa-solid fa-trophy"></i></div>
+                                <div class="flex-1 text-white"><p class="text-xs"><b>CodeCraft</b> starts in 30 mins! Get ready.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- USER PROFILE SECTION (Replacing Sign In Button) -->
+        <div class="relative group">
+            <div class="flex items-center gap-4 cursor-pointer p-1 pr-3 rounded-2xl hover:bg-white/5 transition duration-300">
+                <div class="text-right hidden sm:block">
+                    <p id="displayUserId" class="text-[10px] font-mono text-indigo-400 font-black uppercase tracking-widest leading-none">ID_0000</p>
+                    <p id="displayUserName" class="text-xs font-bold text-white mt-1">Verified Student</p>
+                </div>
+                
+                <div class="relative">
+                    <div id="userInitial" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black shadow-lg">U</div>
+                    <!-- Small Green Online Dot -->
+                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[#0f172a] rounded-full"></div>
+                </div>
+                <!-- Dropdown Arrow -->
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 group-hover:text-white transition-transform duration-300 group-hover:rotate-180"></i>
+            </div>
+
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 mt-3 w-48 bg-slate-800 border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all p-2">
+                        <a href="profile.html" class="block p-3 hover:bg-white/5 rounded-xl text-sm"><i class="fa-solid fa-user-circle mr-2"></i> My Profile</a>
+                        <a href="setting.html" class="block p-3 hover:bg-white/5 rounded-xl text-sm"><i class="fa-solid fa-gear mr-2"></i> Settings</a>
+                        <hr class="my-2 border-white/5">
+                        <button onclick="logout()" class="w-full text-left p-3 hover:bg-red-500/10 text-red-400 rounded-xl text-sm"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-28 pb-20">
+        <!-- WELCOME SECTION -->
+        <section class="mb-12">
+            <h2 class="text-4xl font-bold mb-2">Welcome, <span id="welcomeName" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Student</span> 👋</h2>
+            <p class="text-slate-400">Here's what's happening in the StudentVerse ecosystem today.</p>
+        </section>
+        <!-- CENTERED STATS -->
+        <!-- <div class="flex justify-center mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+                <div class="glass-card p-8 text-center border-b-4 border-indigo-500">
+                    <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Connected Students</p>
+                    <h3 class="text-3xl font-black">12,480</h3>
+                </div>
+                <div class="glass-card p-8 text-center border-b-4 border-emerald-500">
+                    <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Live Events</p>
+                    <h3 class="text-3xl font-black">12</h3>
+                </div>
+                <div class="glass-card p-8 text-center border-b-4 border-purple-500">
+                    <p class="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Colleges Linked</p>
+                    <h3 class="text-3xl font-black">450+</h3>
+                </div>
+            </div>
+        </div> -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="glass-card p-6 flex flex-col gap-2">
+                <p class="text-slate-400 text-sm">Connected Students</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold">12,480</h3>
+                    <i class="fa-solid fa-users text-indigo-500 text-2xl mb-1"></i>
+                </div>
+            </div>
+            <div class="glass-card p-6 flex flex-col gap-2">
+                <p class="text-slate-400 text-sm">Teams Formed</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold">84</h3>
+                    <i class="fa-solid fa-layer-group text-purple-500 text-2xl mb-1"></i>
+                </div>
+            </div>
+            <div class="glass-card p-6 flex flex-col gap-2">
+                <p class="text-slate-400 text-sm">Live Events</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold">12</h3>
+                    <i class="fa-solid fa-tower-broadcast text-emerald-500 text-2xl mb-1"></i>
+                </div>
+            </div>
+            <div class="glass-card p-6 flex flex-col gap-2">
+                <p class="text-slate-400 text-sm">College Links</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-bold">450+</h3>
+                    <i class="fa-solid fa-link text-blue-500 text-2xl mb-1"></i>
+                </div>
+            </div>
+        </div>
+
+    <main class="container mx-auto px-6 pt-32 pb-20">
+        
+
+        <!-- SLIDER -->
+        <section class="hero-slider-container">
+            <div class="slide active" style="background-image: url('Slide_1.png');"></div>
+            <div class="slide" style="background-image: url('Slide_2.png');"></div>
+            <div class="slide" style="background-image: url('Slide_3.png');"></div>
+            <div class="slide" style="background-image: url('Slide_4.png');"></div>
+            <div class="slide" style="background-image: url('Slide_5.png');"></div>
+        </section>
+
+        <!-- LIVE EVENTS -->
+        <section class="mb-20">
+            <div class="flex justify-between items-end mb-8">
+                <div><h3 class="text-2xl font-black uppercase italic tracking-widest">Live  Events</h3><p class="text-xs text-emerald-400 font-bold uppercase tracking-widest">Recruiting Walk-ins</p></div>
+                <button onclick="viewAll('live-grid')" class="text-indigo-400 font-bold text-xs uppercase tracking-widest hover:underline">View All</button>
+            </div>
+            <div id="live-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Initial 4 -->
+                <div class="glass-card p-4 overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=400" class="w-full h-32 object-cover rounded-xl group-hover:scale-105 transition duration-500">
+                    <h4 class="text-lg font-bold mt-4">CodeCraft</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">MIT Pune • Technical</p>
+                    <button onclick="openModal('CodeCraft', 'MIT Pune', 'Now', '10:00 AM', 'Free', 'Open to All', 'Main Lab', 'Offline', 'https://example.com')" class="w-full bg-indigo-600 py-3 mt-4 rounded-xl font-black text-[10px] uppercase">Join Now</button>
+                </div>
+                <div class="glass-card p-4 overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=400" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Math-X</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">IIT Bombay • Logic</p>
+                    <button onclick="openModal('Math-X', 'IIT Bombay', 'Now', '11:00 AM', '₹100', 'UG Students', 'Room 102', 'Online', '#')" class="w-full bg-indigo-600 py-3 mt-4 rounded-xl font-black text-[10px] uppercase">Join Now</button>
+                </div>
+                <div class="glass-card p-4 overflow-hidden group">
+                    <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=400" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Canvas Battle</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">Stanford • Art</p>
+                    <button onclick="openModal('Canvas Battle', 'Stanford', 'Now', '12:00 PM', 'Free', 'Art Lovers', 'Digital Hall', 'Hybrid', '#')" class="w-full bg-indigo-600 py-3 mt-4 rounded-xl font-black text-[10px] uppercase">Join Now</button>
+                </div>
+                <div class="glass-card p-4 overflow-hidden group">
+                    <img src="https://d8it4huxumps7.cloudfront.net/uploads/images/opportunity/mobile_banner/69cff3a17df82_quantbid-arena.png" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Quantibid</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">Harvard • Finance</p>
+                    <button onclick="openModal('Quantibid', 'Harvard', 'Now', '01:00 PM', '₹200', 'All Fields', 'Finance Wing', 'Offline', '#')" class="w-full bg-indigo-600 py-3 mt-4 rounded-xl font-black text-[10px] uppercase">Join Now</button>
+                </div>
+                <!-- 4 Hidden -->
+                <div class="hidden-item glass-card p-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400" class="w-full h-32 object-cover rounded-xl"><h4 class="text-lg font-bold mt-4">Tech Trivia</h4>
+                    <button onclick="openModal('Tech Trivia', 'Ecosystem', 'Now', '2PM', 'Free', 'All', 'Discord', 'Online', '#')" class="w-full bg-indigo-600 py-3 mt-4 rounded-xl font-black text-[10px] uppercase">Join Now</button>
+                </div>
+                <!-- ... (Add 3 more similar hidden cards) -->
+            </div>
+        </section>
+
+        <!-- UPCOMING EVENTS -->
+        <section class="mb-20">
+            <div class="flex justify-between items-end mb-8">
+                <div><h3 class="text-2xl font-black uppercase italic tracking-widest">Upcoming  Events</h3><p class="text-xs text-emerald-400 font-bold uppercase tracking-widest">Let's grab the opportunities</p></div>
+                <button onclick="viewAll('upcoming-grid')" class="text-indigo-400 font-bold text-xs uppercase tracking-widest hover:underline">View All</button>
+            </div>
+            <div id="upcoming-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-4 group">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=400" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Mood Indigo</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">IITB • Cultural</p>
+                    <button onclick="openModal('Mood Indigo', 'IIT Bombay', 'Jan 10', '9:00 AM', '₹500', 'Global Students', 'Full Campus', 'Offline', 'https://moodi.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-black text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>
+                <div class="glass-card p-4 group">
+                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=400" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Technozion</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">NITW • Techno-Management</p>
+                    <button onclick="openModal('Technozion', 'NIT Warangal', 'Feb 5', '10:00 AM', '₹300', 'All Students', 'Tech Campus', 'Offline', 'https://technozion.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-black text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>
+                <div class="glass-card p-4 group">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ8ZZARa4rgej8CSfFTbHtWuOKb7XRGSGdFg&s" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Saarang</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">IITM • Cultural</p>
+                    <button onclick="openModal('Saarang', 'IIT Madras', ' Mar 15', '9:00 AM', '₹400', 'Global Students', 'Full Campus', 'Offline', 'https://saarang.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-bold text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>
+                <div class="glass-card p-4 group">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Kshitij</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">IITKGP • Techno-Management</p>
+                    <button onclick="openModal('Kshitij', 'IIT Kharagpur', 'Apr 20', '10:00 AM', '₹350', 'All Students', 'Tech Campus', 'Offline', 'https://kshitij.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-bold text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>
+                <div class="hidden-item glass-card p-4 group">
+                    <img src="https://media.licdn.com/dms/image/v2/C4D12AQF1MDORJSI0zg/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1573551014437?e=2147483647&v=beta&t=vu-0sBXzFVMQXgzaPoH-rDPoKZrakjqyfhxjhQLBL5M" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Colosseum</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">BITS Pilani • Techno-Cultural</p>
+                    <button onclick="openModal('Colosseum', 'BITS Pilani', 'May 25', '9:00 AM', '₹450', 'Global Students', 'Full Campus', 'Offline', 'https://colosseum.bits-pilani.ac.in')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-bold text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>
+                <div class="hidden-item glass-card p-4 group">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKIUzMElZQ7lQ5J-sonLEGXqJ3qusnDxPXuw&s" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Technozion</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">NITW • Techno-Management</p>
+                    <button onclick="openModal('Technozion', 'NIT Warangal', 'Feb 5', '10:00 AM', '₹300', 'All Students', 'Tech Campus', 'Offline', 'https://technozion.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-black text-[10px] uppercase hover:bg-indigo-600 transition">Register</button>
+                </div>   
+                <!-- ... (Repeat 3 more initial, 4 hidden-item) -->
+            </div>
+        </section>
+
+        <!-- ACTIVE PROJECTS -->
+        <section class="mb-20">
+            <div class="flex justify-between items-end mb-8">
+                <div><h3 class="text-2xl font-black uppercase italic tracking-widest">Active  Projects</h3><p class="text-xs text-emerald-400 font-bold uppercase tracking-widest">Let's  learn together</p></div>
+                <button onclick="viewAll('live-grid')" class="text-indigo-400 font-bold text-xs uppercase tracking-widest hover:underline">View All</button>
+            </div>
+            <div id="live-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-4 group">
+                    <img src="https://play-lh.googleusercontent.com/S0GbuDXr1XndGgWvwi-t0YSMyYRGcgG3NDRbUeEK_SQD3iX03YAlV_YP6zyn314kvK2D" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">EduLens</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">Matrix-Solver</p>
+                    <button onclick="openModal('EduLens', 'Matrix-Solver', 'Jan 10', '9:00 AM', '₹500', 'Global Students', 'Full Campus', 'Online', 'https://edulens2.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-black text-[10px] uppercase hover:bg-indigo-600 transition">Join Us</button>
+                </div>
+                <div class="glass-card p-4 group">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTHOuR8P5qnSxxQZBYRYF5bg3fW0BhBvW1rA&s" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Technozion</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">NITW • Techno-Management</p>
+                    <button onclick="openModal('Technozion', 'NIT Warangal', 'Feb 5', '10:00 AM', '₹300', 'All Students', 'Tech Campus', 'Offline', 'https://technozion.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-black text-[10px] uppercase hover:bg-indigo-600 transition">Join Us</button>
+                </div>
+                <div class="glass-card p-4 group">
+                    <img src="https://media.licdn.com/dms/image/v2/D4D0BAQHFFGDRA3OI2g/company-logo_200_200/B4DZpeOdWQGkAI-/0/1762517443147/saarang_logo?e=2147483647&v=beta&t=KJP0POWy0yBiVoNRkb83wX0c8Y5TXFpWMydi3CXs7oI" class="w-full h-32 object-cover rounded-xl">
+                    <h4 class="text-lg font-bold mt-4">Saarang</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black">IITM • Cultural</p>
+                    <button onclick="openModal('Saarang', 'IIT Madras', ' Mar 15', '9:00 AM', '₹400', 'Global Students', 'Full Campus', 'Offline', 'https://saarang.org')" class="w-full border border-indigo-500/50 py-3 mt-4 rounded-xl font-bold text-[10px] uppercase hover:bg-indigo-600 transition">Join Us</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- CHATBOT -->
+    <div class="fixed bottom-8 right-8 z-[200]">
+        <div id="chatWindow" class="hidden glass-card w-80 h-[450px] mb-4 flex flex-col overflow-hidden border-2 border-indigo-500/30">
+            <div class="bg-indigo-600 p-4 font-black text-xs uppercase tracking-widest flex justify-between items-center">
+                <span>SV Assistant</span>
+                <button onclick="toggleChat()"><i class="fa-solid fa-minus"></i></button>
+            </div>
+            <div id="chatArea" class="flex-1 p-4 overflow-y-auto space-y-3">
+                <div class="bg-white/10 p-2 rounded-xl text-xs max-w-[80%]">Hi! How can I help you in the ecosystem today?</div>
+            </div>
+            <div class="p-3 border-t border-white/10 flex gap-2">
+                <input type="text" id="chatInput" placeholder="Type here..." class="flex-1 bg-white/5 border border-white/10 rounded-lg text-xs p-2 outline-none">
+                <button onclick="sendChat()" class="bg-indigo-600 px-3 rounded-lg"><i class="fa-solid fa-paper-plane text-xs"></i></button>
+            </div>
+        </div>
+        <button onclick="toggleChat()" class="w-16 h-16 bg-indigo-600 rounded-2xl shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition"><i class="fa-solid fa-comment-dots"></i></button>
+    </div>
+
+
+    <!-- 3D REGISTRATION MODAL -->
+    <div id="regModal" class="fixed inset-0 z-[300] backdrop-blur-3xl bg-black/80 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full p-10 relative border-t-8 border-indigo-600 shadow-2xl">
+            <button onclick="closeReg()" class="absolute top-6 right-6 text-2xl text-slate-500 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="mTitle" class="text-4xl font-black tracking-tighter mb-1 text-white">Event Name</h2>
+            <p id="mCollege" class="text-indigo-400 font-black text-xs uppercase tracking-widest mb-8">College Name</p>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                <div class="meta-box"><p class="text-[8px] font-black text-slate-500 uppercase">Date</p><p id="mDate" class="text-xs font-bold">-</p></div>
+                <div class="meta-box"><p class="text-[8px] font-black text-slate-500 uppercase">Time</p><p id="mTime" class="text-xs font-bold">-</p></div>
+                <div class="meta-box"><p class="text-[8px] font-black text-slate-500 uppercase">Entry Fee</p><p id="mFee" class="text-xs font-bold text-emerald-400">-</p></div>
+                <div class="meta-box"><p class="text-[8px] font-black text-slate-500 uppercase">Mode</p><p id="mMode" class="text-xs font-bold text-indigo-400">-</p></div>
+                <div class="meta-box col-span-2"><p class="text-[8px] font-black text-slate-500 uppercase">Venue</p><p id="mVenue" class="text-xs font-bold">-</p></div>
+                <div class="meta-box col-span-3"><p class="text-[8px] font-black text-slate-500 uppercase">Eligibility</p><p id="mElig" class="text-xs font-bold">-</p></div>
+            </div>
+
+            <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 mb-8">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-file-pdf text-rose-500"></i>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-300">Rulebook & Guidelines</span>
+                </div>
+                <a href="#" class="text-indigo-400 font-black text-[9px] uppercase hover:underline">Download PDF</a>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <a id="mOfficial" href="#" target="_blank" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-center font-black uppercase text-xs tracking-widest shadow-xl transition">Register on Official Site</a>
+                <button onclick="closeReg()" class="flex-1 bg-white/5 py-4 rounded-2xl font-black uppercase text-[10px] text-slate-500">Back</button>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-white/5 flex justify-between items-center">
+                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Help: support@studentverse.com</p>
+                <div class="flex gap-2 text-slate-500"><i class="fa-solid fa-circle-info"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // NAVIGATION
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function toggleNotif() { document.getElementById('notifHub').classList.toggle('show'); }
+
+        // SLIDER
+        let cur = 0; const slides = document.querySelectorAll('.slide');
+        setInterval(() => { slides[cur].classList.remove('active'); cur = (cur + 1) % slides.length; slides[cur].classList.add('active'); }, 5000);
+
+        // MODAL
+        function openModal(title, college, date, time, fee, elig, venue, mode, link) {
+            document.getElementById('mTitle').innerText = title;
+            document.getElementById('mCollege').innerText = college + " • Ecosystem Verified";
+            document.getElementById('mDate').innerText = date;
+            document.getElementById('mTime').innerText = time;
+            document.getElementById('mFee').innerText = fee;
+            document.getElementById('mElig').innerText = elig;
+            document.getElementById('mVenue').innerText = venue;
+            document.getElementById('mMode').innerText = mode;
+            document.getElementById('mOfficial').href = link;
+            document.getElementById('regModal').classList.remove('hidden');
+        }
+        function closeReg() { document.getElementById('regModal').classList.add('hidden'); }
+
+        // VIEW ALL DYNAMIC
+        function viewAll(id) {
+            document.querySelectorAll(`#${id} .hidden-item`).forEach(i => {
+                i.style.display = 'block';
+                i.classList.add('animate-in', 'fade-in', 'slide-in-from-bottom-4', 'duration-500');
+            });
+            event.target.style.display = 'none';
+        }
+                // CHATBOT
+        function toggleChat() { document.getElementById('chatWindow').classList.toggle('hidden'); }
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            if(!input.value) return;
+            const area = document.getElementById('chatArea');
+            area.innerHTML += `<div class="flex justify-end"><div class="bg-indigo-600 p-2 rounded-xl text-xs max-w-[80%]">${input.value}</div></div>`;
+            input.value = "";
+            area.scrollTop = area.scrollHeight;
+        }
+
+
+
+        // AUTH
+        const name = localStorage.getItem('sv_user_name') || "Alex";
+        document.getElementById('displayUserName').innerText = name;
+        document.getElementById('welcomeName').innerText = name;
+        document.getElementById('userInitial').innerText = name[0].toUpperCase();
+        document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0421";
+        
+        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

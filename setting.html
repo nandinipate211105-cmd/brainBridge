@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosystem Settings | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --bg-dark: #0f172a; }
+        body { background: var(--bg-dark); color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; transition: all 0.3s ease; }
+        
+        /* Glassmorphism Components */
+        .glass-card { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 28px; transition: 0.3s ease; }
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.85); }
+
+        /* Sidebar Logic */
+        #sidebar { transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 100; }
+        .sidebar-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; }
+
+        /* Custom Toggles */
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.05); transition: .4s; border-radius: 34px; border: 1px solid rgba(255,255,255,0.1); }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Theme Card Active State */
+        .theme-card.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+        .theme-card.active .theme-check { display: block; }
+
+        /* Active Tab Navigation */
+        .set-tab.active { background: rgba(255, 255, 255, 0.05); color: var(--primary); border-right: 3px solid var(--primary); }
+        
+        input, select { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.05) !important; color: white !important; }
+        input:focus, select:focus { border-color: var(--primary) !important; outline: none; }
+
+        /* Custom Range Slider */
+        .range-slider { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 5px; outline: none; }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); cursor: pointer; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- SIDEBAR -->
+    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 z-[90]" onclick="toggleSidebar()"></div>
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full z-[100] shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Menu</h2>
+            <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="space-y-3">
+            <a href="dashboard.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition group">
+                <i class="fa-solid fa-chart-line w-8 text-indigo-400 group-hover:scale-125 transition"></i> Dashboard
+            </a>
+            <a href="college.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-university w-8 text-indigo-400"></i> Search College
+            </a>
+            <a href="team.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-users-gear w-8 text-indigo-400"></i> Team Formation
+            </a>
+            <a href="communication.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-comments w-8 text-indigo-400"></i> Communication
+            </a>
+            <a href="feedback.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-message w-8 text-indigo-400"></i> Feedback</a>
+            <div class="pt-10 mt-10 border-t border-slate-800 space-y-4">
+                <a href="profile.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                    <i class="fa-solid fa-user w-8 text-indigo-400"></i> Profile
+                </a>
+                <a href="signup.html" class="flex items-center p-3 rounded-lg hover:bg-red-500/20 text-red-400 transition">
+                    <i class="fa-solid fa-right-from-bracket w-8"></i> Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- HEADER: RESTORED WITH DROPDOWN FIX -->
+    <header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition"><i class="fa-solid fa-bars-staggered"></i></button>
+                <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
+            </div>
+
+            <div class="relative group">
+                <div class="flex items-center gap-4 cursor-pointer py-1">
+                    <div class="text-right hidden sm:block">
+                        <p id="headerUserId" class="text-[10px] font-mono text-indigo-400 font-black uppercase tracking-widest leading-none">ID_000</p>
+                        <p id="headerUserName" class="text-xs font-bold text-white mt-1">Verified Student</p>
+                    </div>
+                    <div id="headerAvatar" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black">U</div>                
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300 group-hover:rotate-180 group-hover:text-white"></i>
+                </div>
+
+                <!-- DROPDOWN MENU -->
+                <div class="absolute right-0 mt-2 w-56 bg-[#131c31] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[120] overflow-hidden backdrop-blur-xl">
+                    <div class="p-4 border-b border-white/5 bg-white/5"><p class="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Account Hub</p></div>
+                    <div class="p-2">
+                        <a href="profile.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-sm font-medium transition"><i class="fa-solid fa-user-circle text-indigo-400"></i> My Profile</a>
+                        <a href="setting.html" class="flex items-center gap-3 p-3 bg-indigo-600/20 rounded-xl text-sm font-medium transition"><i class="fa-solid fa-gear text-indigo-400"></i> Settings</a>
+                    </div>
+                    <div class="p-2 border-t border-white/5 bg-black/20"><button onclick="logout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-400 text-sm font-bold transition"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 pt-32 pb-20 max-w-6xl">
+        
+        <div class="mb-12">
+            <span class="text-xs font-black uppercase text-indigo-500 tracking-[0.3em]">Personalization</span>
+            <h2 class="text-5xl font-black tracking-tighter mt-1">Ecosystem Configurations</h2>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-10">
+            
+            <!-- LEFT NAVIGATION -->
+            <div class="w-full lg:w-64 flex flex-col gap-2">
+                <button onclick="switchTab('appearance')" id="tab-appearance" class="set-tab active flex items-center gap-4 p-4 rounded-xl text-sm font-bold text-left transition"><i class="fa-solid fa-palette w-5"></i> Appearance</button>
+                <button onclick="switchTab('localization')" id="tab-localization" class="set-tab flex items-center gap-4 p-4 rounded-xl text-sm font-bold text-left transition hover:bg-white/5"><i class="fa-solid fa-globe w-5"></i> Language & Region</button>
+                <button onclick="switchTab('privacy')" id="tab-privacy" class="set-tab flex items-center gap-4 p-4 rounded-xl text-sm font-bold text-left transition hover:bg-white/5"><i class="fa-solid fa-user-shield w-5"></i> Privacy & Security</button>
+            </div>
+
+            <!-- RIGHT CONTENT AREA -->
+            <div class="flex-1 space-y-8">
+                
+                <!-- 1. APPEARANCE SECTION -->
+                <div id="section-appearance" class="settings-panel space-y-8">
+                    
+                    <!-- Theme Selector -->
+                    <div class="glass-card p-8">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-black">Visual Theme</h3>
+                            <p class="text-sm text-slate-500">Choose the atmosphere of your workspace.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Dark Card -->
+                            <div class="theme-card active glass-card p-4 cursor-pointer relative" onclick="setTheme(this, 'dark')">
+                                <i class="fa-solid fa-circle-check text-indigo-500 absolute top-3 right-3 hidden theme-check"></i>
+                                <div class="w-full h-16 bg-[#0f172a] rounded-xl mb-3 border border-white/5 flex items-center justify-center"><i class="fa-solid fa-moon text-xl text-slate-600"></i></div>
+                                <p class="text-xs font-bold text-center">Midnight Deep</p>
+                            </div>
+                            <!-- Pure Black Card -->
+                            <div class="theme-card glass-card p-4 cursor-pointer relative" onclick="setTheme(this, 'amoled')">
+                                <i class="fa-solid fa-circle-check text-indigo-500 absolute top-3 right-3 hidden theme-check"></i>
+                                <div class="w-full h-16 bg-black rounded-xl mb-3 border border-white/5 flex items-center justify-center"><i class="fa-solid fa-bolt text-xl text-purple-600"></i></div>
+                                <p class="text-xs font-bold text-center">AMOLED Black</p>
+                            </div>
+                            <!-- Light Card -->
+                            <div class="theme-card glass-card p-4 cursor-pointer relative" onclick="setTheme(this, 'light')">
+                                <i class="fa-solid fa-circle-check text-indigo-500 absolute top-3 right-3 hidden theme-check"></i>
+                                <div class="w-full h-16 bg-white rounded-xl mb-3 border border-slate-200 flex items-center justify-center"><i class="fa-solid fa-sun text-xl text-amber-500"></i></div>
+                                <p class="text-xs font-bold text-center">Eclipse Light</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typography -->
+                    <div class="glass-card p-8">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-black">Typography Laboratory</h3>
+                            <p class="text-sm text-slate-500">Select the font-face that scales your reading speed.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="setFont('jakarta')" class="bg-white/5 p-4 rounded-xl border border-white/10 hover:border-indigo-500 text-left transition">
+                                <p class="font-bold text-sm" style="font-family: 'Plus Jakarta Sans', sans-serif;">Plus Jakarta Sans</p>
+                                <p class="text-xs text-slate-500 mt-1">Default clean geometric</p>
+                            </button>
+                            <button onclick="setFont('grotesk')" class="bg-white/5 p-4 rounded-xl border border-white/10 hover:border-indigo-500 text-left transition">
+                                <p class="font-bold text-sm" style="font-family: 'Space Grotesk', sans-serif;">Space Grotesk</p>
+                                <p class="text-xs text-slate-500 mt-1">Futuristic & Tech-focused</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Glass UI Density -->
+                    <div class="glass-card p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="text-xl font-black">Glassmorphism Intensity</h3>
+                                <p class="text-sm text-slate-500">Adjust the blur and depth of floating UI elements.</p>
+                            </div>
+                            <span id="rangeVal" class="text-lg font-black text-indigo-400">15px</span>
+                        </div>
+                        <input type="range" min="0" max="30" value="15" class="range-slider" oninput="document.getElementById('rangeVal').innerText = this.value + 'px'">
+                    </div>
+                </div>
+
+                <!-- 2. LOCALIZATION SECTION -->
+                <div id="section-localization" class="settings-panel space-y-8 hidden">
+                    <div class="glass-card p-8">
+                        <div class="mb-6">
+                            <h3 class="text-xl font-black">Language & Region</h3>
+                            <p class="text-sm text-slate-500">Globalize your StudentVerse interface.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Interface Language</label>
+                                <select class="w-full p-4 rounded-xl outline-none">
+                                    <option>English (Global)</option>
+                                    <option>Marathi</option>
+                                    <option>Hindi</option>
+                                    <option>Telugu</option>
+                                    <option>Bengali</option>
+                                    <option>Kannada</option>
+                                    <option>Gujarati</option>
+                                    <option>Punjabi</option>
+                                    <option>Malayalam</option>
+                                    <option>Bhojpuri</option>
+                                    <option>Assamese</option>
+                                    <option>Odia</option>
+                                    <option>Maithili</option>;
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Time Zone</label>
+                                <select class="w-full p-4 rounded-xl outline-none">
+                                    <option>IST (UTC +5:30)</option>
+                                    <option>EST (UTC -5:00)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. PRIVACY SECTION -->
+                <div id="section-privacy" class="settings-panel space-y-8 hidden">
+                    <div class="glass-card p-8 space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                            <div>
+                                <p class="font-bold text-sm">Ghost Mode</p>
+                                <p class="text-xs text-slate-500">Hide your online status and active team cards.</p>
+                            </div>
+                            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl">
+                            <div>
+                                <p class="font-bold text-sm">Public Academic ID</p>
+                                <p class="text-xs text-slate-500">Allow search by your unique ID globally.</p>
+                            </div>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DANGER ZONE -->
+                <div class="glass-card p-8 border border-red-500/20 bg-red-500/5">
+                    <h3 class="text-lg font-bold text-red-500 mb-2">Danger Zone</h3>
+                    <p class="text-xs text-slate-400 mb-6">Permanently remove your identity from the StudentVerse ecosystem.</p>
+                    <div class="flex gap-4">
+                        <button class="bg-red-500/10 border border-red-500/20 text-red-500 px-6 py-2 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition uppercase tracking-widest">Deactivate</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab Switcher
+        function switchTab(id) {
+            document.querySelectorAll('.set-tab').forEach(t => t.classList.remove('active', 'hover:bg-white/5'));
+            document.getElementById('tab-' + id).classList.add('active');
+            
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('section-' + id).classList.remove('hidden');
+        }
+
+        // Theme Switcher (Dummy UI behavior)
+        function setTheme(element, theme) {
+            document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            if (theme === 'amoled') {
+                document.body.style.backgroundColor = '#000000';
+            } else if (theme === 'light') {
+                document.body.style.backgroundColor = '#f8fafc';
+                document.body.style.color = '#0f172a';
+            } else {
+                document.body.style.backgroundColor = '#0f172a';
+                document.body.style.color = '#ffffff';
+            }
+        }
+
+        // Font Switcher
+        function setFont(font) {
+            if(font === 'grotesk') {
+                document.body.style.fontFamily = "'Space Grotesk', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
+            }
+        }
+
+        // Sync Global Elements
+        const userName = localStorage.getItem('sv_user_name') || "Student";
+        document.getElementById('headerUserName').innerText = userName;
+        document.getElementById('headerUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+        document.getElementById('headerAvatar').innerText = userName[0].toUpperCase();
+
+        function toggleSidebar() { 
+            const sb = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sb.classList.toggle('-translate-x-full'); 
+            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+        }
+        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+    </script>
+</body>
+</html>

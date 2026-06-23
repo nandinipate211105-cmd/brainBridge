@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --accent: #a855f7; --bg-dark: #0f172a; }
+        body { background: var(--bg-dark); color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; transition: 0.3s; }
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.85); }
+        #sidebar { transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 100; }
+        .sidebar-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; }
+
+        .profile-cover { height: 180px; background: linear-gradient(135deg, #4338ca 0%, #7e22ce 100%); border-radius: 28px 28px 0 0; }
+        .avatar-container { margin-top: -70px; z-index: 10; }
+        .avatar-img { width: 140px; height: 140px; border-radius: 40px; border: 6px solid var(--bg-dark); background: linear-gradient(to bottom right, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; font-weight: 800; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+        .tab-btn.active { background: rgba(99, 102, 241, 0.15); color: #818cf8; border-color: #6366f1; }
+        .modal-scroll::-webkit-scrollbar { width: 4px; }
+        .modal-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- SIDEBAR -->
+    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 z-[90]" onclick="toggleSidebar()"></div>
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full z-[100] shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Menu</h2>
+            <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="space-y-3">
+            <a href="dashboard.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition group">
+                <i class="fa-solid fa-chart-line w-8 text-indigo-400 group-hover:scale-125 transition"></i> Dashboard
+            </a>
+            <a href="college.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-university w-8 text-indigo-400"></i> Search College
+            </a>
+            <a href="team.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-users-gear w-8 text-indigo-400"></i> Team Formation
+            </a>
+            <a href="project.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-project-diagram w-8"></i> Event Management</a>
+
+            <a href="communication.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                <i class="fa-solid fa-comments w-8 text-indigo-400"></i> Communication
+            </a>
+            <a href="feedback.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-message w-8 text-indigo-400"></i> Feedback</a>
+            <div class="pt-10 mt-10 border-t border-slate-800 space-y-4">
+                <a href="profile.html" class="flex items-center p-3 rounded-lg hover:bg-indigo-600/20 transition">
+                    <i class="fa-solid fa-user w-8 text-indigo-400"></i> Profile
+                </a>
+                <a href="signup.html" class="flex items-center p-3 rounded-lg hover:bg-red-500/20 text-red-400 transition">
+                    <i class="fa-solid fa-right-from-bracket w-8"></i> Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+<!-- HEADER: RESTORED NAME + ID AT TOP RIGHT -->
+<header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <!-- Left Section -->
+        <div class="flex items-center gap-6">
+            <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+            <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
+        </div>
+
+        <!-- Right Section: This "relative group" wraps everything needed for the dropdown -->
+        <div class="relative group">
+            <div class="flex items-center gap-4 cursor-pointer py-1">
+                <!-- User Info -->
+                <div class="text-right hidden sm:block">
+                    <p id="headerUserId" class="text-[10px] font-mono text-indigo-400 font-black uppercase tracking-widest leading-none">ID_000</p>
+                    <p id="headerUserName" class="text-xs font-bold text-white mt-1">Verified Student</p>
+                </div>
+                
+                <!-- Avatar -->
+                <div id="headerAvatar" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black shadow-lg">U</div>                
+                
+                <!-- Dropdown Arrow -->
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 transition-transform duration-300 group-hover:rotate-180 group-hover:text-white"></i>
+            </div>
+
+            <!-- THE DROPDOWN MENU (Now inside the group) -->
+            <div class="absolute right-0 mt-2 w-56 bg-[#131c31] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[120] overflow-hidden backdrop-blur-xl">
+                <div class="p-4 border-b border-white/5 bg-white/5">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">Account Hub</p>
+                </div>
+                <div class="p-2">
+                    <a href="profile.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-600/20 text-sm font-medium transition group/item">
+                        <i class="fa-solid fa-user-circle text-indigo-400 group-hover/item:scale-110 transition"></i>
+                        My Profile
+                    </a>
+                    <a href="setting.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 text-sm font-medium transition group/item">
+                        <i class="fa-solid fa-gear text-slate-400 group-hover/item:rotate-90 transition duration-500"></i>
+                        Settings
+                    </a>
+                </div>
+                <div class="p-2 border-t border-white/5 bg-black/20">
+                    <button onclick="logout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-400 text-sm font-bold transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <main class="container mx-auto px-6 pt-32 pb-20">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT: IDENTITY & BADGES -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="glass-card overflow-hidden">
+                    <div class="profile-cover"></div>
+                    <div class="px-8 pb-10">
+                        <div class="flex flex-col md:flex-row items-end justify-between gap-6">
+                            <div class="flex flex-col md:flex-row items-end gap-6 avatar-container">
+                                <div id="mainAvatar" class="avatar-img shadow-2xl">A</div>
+                                <div class="mb-2 text-center md:text-left">
+                                    <h2 id="mainName" class="text-4xl font-black tracking-tighter">Name</h2>
+                                    <p id="mainField" class="text-indigo-400 font-bold text-xs uppercase tracking-widest">Field • College Name</p>
+                                    <div class="flex gap-4 mt-3 justify-center md:justify-start text-slate-500">
+                                        <i class="fa-brands fa-linkedin text-xl hover:text-white cursor-pointer transition"></i>
+                                        <i class="fa-brands fa-instagram text-xl hover:text-white cursor-pointer transition"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="toggleModal(true)" class="bg-indigo-600 hover:bg-indigo-500 px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/20">
+                                <i class="fa-solid fa-pencil mr-2"></i> Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="glass-card p-8">
+                    <h3 class="text-sm font-black uppercase text-slate-500 tracking-widest mb-6">Badges Earned</h3>
+                    <div class="flex flex-wrap gap-6">
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20"><i class="fa-solid fa-trophy text-2xl"></i></div>
+                            <span class="text-[9px] font-black uppercase">Winner</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 border border-indigo-500/20"><i class="fa-solid fa-code text-2xl"></i></div>
+                            <span class="text-[9px] font-black uppercase">Active Dev</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: STATS & GROWTH CHART -->
+            <div class="space-y-8">
+                <!-- RESTORED: STATS CARDS ABOVE CHART -->
+                <div class="glass-card p-8 bg-gradient-to-br from-indigo-500/10 to-transparent">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center border-r border-white/5">
+                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Active hours</p>
+                            <p class="text-3xl font-black">14.12 hr</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Credits</p>
+                            <p class="text-3xl font-black text-indigo-400">450</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growth Radar -->
+                <div class="glass-card p-8">
+                    <h3 class="text-sm font-black uppercase text-slate-500 tracking-widest mb-6">Power Level</h3>
+                    <div class="h-64">
+                        <canvas id="skillChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC TABS: FULLY FUNCTIONAL -->
+        <div class="mt-12">
+            <div class="flex gap-4 mb-8 overflow-x-auto pb-2 no-scrollbar">
+                <button onclick="switchTab('teams')" id="btn-teams" class="tab-btn active border border-white/5 px-8 py-3 rounded-2xl font-bold text-sm transition">Teams Joined (5+)</button>
+                <button onclick="switchTab('connections')" id="btn-connections" class="tab-btn border border-white/5 px-8 py-3 rounded-2xl font-bold text-sm transition">Connections (3+)</button>
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn border border-white/5 px-8 py-3 rounded-2xl font-bold text-sm transition">Participated (12+)</button>
+                <button onclick="switchTab('achievements')" id="btn-achievements" class="tab-btn border border-white/5 px-8 py-3 rounded-2xl font-bold text-sm transition">Achievements (4+)</button>
+            </div>
+            <div id="tab-content" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        </div>
+    </main>
+
+    <!-- EDIT MODAL -->
+    <div id="editModal" class="fixed inset-0 z-[110] backdrop-blur-2xl bg-black/80 hidden flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                <h2 class="text-2xl font-black">Modify Identity</h2>
+                <button onclick="toggleModal(false)" class="text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-8 overflow-y-auto modal-scroll space-y-8 flex-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Full Name</label><input type="text" id="edit-name" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">User ID</label><input type="text" id="edit-id" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Field</label><input type="text" id="edit-field" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">College</label><input type="text" id="edit-college" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">LinkedIn ID</label><input type="text" id="edit-li" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Instagram ID</label><input type="text" id="edit-ig" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">GitHub ID</label><input type="text" id="edit-gh" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Hobbies</label><input type="text" id="edit-hobbies" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Date of Birth</label><input type="date" id="edit-dob" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                    <div><label class="text-[10px] uppercase font-black text-slate-500 mb-2 block">Profile Picture URL</label><input type="text" id="edit-pic" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10"></div>
+                </div>
+                <textarea id="edit-bio" placeholder="Update your Bio" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-white/10 h-24"></textarea>
+            </div>
+            <div class="p-6 border-t border-white/10">
+                <button onclick="saveProfile()" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl">Update Ecosystem DNA</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DUMMY TAB DATA ---
+        const dummyData = {
+            teams: [
+                { title: "Alpha Coders", role: "Leader", event: "SIH 2024" },
+                { title: "Design Mavericks", role: "Contributor", event: "UI Hunt" },
+                { title: "Robo-Squad", role: "Member", event: "TechFest" }
+            ],
+            connections: [
+                { title: "Rahul Singh", role: "BTech", event: "IIT Bombay" },
+                { title: "Sarah Jones", role: "BSc", event: "Stanford" },
+                { title: "Vikram Rao", role: "BCA", event: "MIT Pune" }
+            ],
+            events: [
+                { title: "Hack-a-thon", role: "Winner", event: "Global" },
+                { title: "Design Sprint", role: "Finalist", event: "National" },
+                { title: "AI Workshop", role: "Participated", event: "Campus" }
+            ],
+            achievements: [
+                { title: "Winner - SIH 2024", role: "Gold Medal", event: "Smart India Hackathon" },
+                { title: "Best Design - UI Hunt", role: "Silver Medal", event: "UI/UX Design Challenge" },
+                { title: "Robo-Squad Finalist", role: "Bronze Medal", event: "TechFest Robotics Competition" }
+            ]
+        };
+
+        // --- AUTH SYNC ---
+        function syncUI() {
+            const name = localStorage.getItem('sv_user_name') || "Student";
+            const id = localStorage.getItem('sv_user_id') || "ID_000";
+            const field = localStorage.getItem('sv_user_field') || "BTech";
+
+            document.getElementById('headerUserName').innerText = name;
+            document.getElementById('headerUserId').innerText = id;
+            document.getElementById('mainName').innerText = name;
+            document.getElementById('headerAvatar').innerText = name[0].toUpperCase();
+            document.getElementById('mainAvatar').innerText = name[0].toUpperCase();
+            document.getElementById('mainField').innerText = field + " • Student Ecosystem";
+
+            // Prefill modal
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-field').value = field;
+        }
+
+        // --- TAB LOGIC ---
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${type}`).classList.add('active');
+            
+            const container = document.getElementById('tab-content');
+            container.innerHTML = dummyData[type].map(item => `
+                <div class="glass-card p-6 border-l-4 border-indigo-500">
+                    <h4 class="font-bold text-lg">${item.title}</h4>
+                    <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-4">${item.event}</p>
+                    <span class="bg-indigo-600/10 text-indigo-400 text-[10px] font-bold px-3 py-1 rounded-full border border-indigo-500/20">${item.role}</span>
+                </div>
+            `).join('');
+        }
+
+        // --- CHART ---
+        const ctx = document.getElementById('skillChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Logic', 'Code', 'Design', 'Comms', 'Agility'],
+                datasets: [{
+                    data: [85, 95, 70, 80, 65],
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: '#6366f1',
+                    pointBackgroundColor: '#6366f1'
+                }]
+            },
+            options: {
+                scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, pointLabels: { color: '#64748b', font: { weight: 'bold' } }, ticks: { display: false } } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- UTILS ---
+        function toggleModal(show) { document.getElementById('editModal').classList.toggle('hidden', !show); }
+        function saveProfile() {
+            localStorage.setItem('sv_user_name', document.getElementById('edit-name').value);
+            localStorage.setItem('sv_user_id', document.getElementById('edit-id').value);
+            syncUI(); toggleModal(false); alert("Ecosystem DNA Updated!");
+        }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebarOverlay').style.display === 'block' ? 'none' : 'block'; }
+        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+
+        syncUI();
+        switchTab('teams');
+    </script>
+</body>
+</html>

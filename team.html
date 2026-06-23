@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Hub | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --bg-dark: #0f172a; }
+        body { background: var(--bg-dark); color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s ease; }
+        .glass-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.2); }
+        
+        #sidebar { transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 100; }
+        .sidebar-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; }
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.85); }
+        
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; }
+        .progress-fill { height: 100%; transition: width 0.5s ease; border-radius: 10px; }
+        
+        input, textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        input:focus, textarea:focus { border-color: var(--primary) !important; outline: none; }
+
+        /* 3D Success Popup Animation */
+        #successPopup { 
+            transform: scale(0.5) translateY(100px); 
+            opacity: 0; 
+            pointer-events: none; 
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        #successPopup.active { 
+            transform: scale(1) translateY(0); 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+
+        .expand-section { transition: all 0.4s ease; max-height: 0; overflow: hidden; opacity: 0; }
+        .expand-section.show { max-height: 200px; opacity: 1; margin-top: 1rem; }
+    </style>
+    <script src="https://meet.jit.si/external_api.js"></script>
+</head>
+<body class="min-h-screen">
+
+    <!-- SIDEBAR -->
+    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 z-[90]" onclick="toggleSidebar()"></div>
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full z-[100] shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-extrabold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Menu</h2>
+            <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="space-y-3">
+            <a href="dashboard.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-chart-line w-8 text-indigo-400"></i> Dashboard</a>
+            <a href="college.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-university w-8 text-indigo-400"></i> Search College</a>
+            <a href="team.html" class="flex items-center p-3 rounded-xl bg-indigo-600/20 text-indigo-400 font-bold"><i class="fa-solid fa-users-gear w-8"></i> Team Formation</a>
+            <a href="project.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-project-diagram w-8"></i> Event Management</a>
+
+            <a href="communication.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-comments w-8 text-indigo-400"></i> Communication</a>            
+            <a href="feedback.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-message w-8 text-indigo-400"></i> Feedback</a>
+            <hr class="border-white/5 my-4">
+            <a href="profile.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-user w-8 text-indigo-400"></i> My Profile</a>
+            <button onclick="logout()" class="w-full text-left flex items-center p-3 rounded-xl hover:bg-red-600/20 transition text-red-400"><i class="fa-solid fa-right-from-bracket w-8"></i> Logout</button>
+        </nav>
+    </div>
+
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition"><i class="fa-solid fa-bars-staggered"></i></button>
+                <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
+            </div>
+            <div class="relative group">
+                <div class="flex items-center gap-4 cursor-pointer p-1 pr-3 rounded-2xl hover:bg-white/5 transition">
+                    <div class="text-right hidden sm:block">
+                        <p id="displayUserId" class="text-[10px] font-mono text-indigo-400 font-black uppercase tracking-widest leading-none">ID_0000</p>
+                        <p id="displayUserName" class="text-xs font-bold text-white mt-1">Username</p>
+                    </div>
+                    <div id="userInitial" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black shadow-lg">U</div>
+                    <div class="relative">
+                    <!-- Dropdown Arrow -->
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 group-hover:text-white transition-transform duration-300 group-hover:rotate-180"></i>
+                    </div>
+
+                    <!-- THE DROPDOWN MENU -->
+                    <div class="absolute right-0 mt-2 w-56 bg-[#131c31] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[120] overflow-hidden backdrop-blur-xl">
+                        <div class="p-4 border-b border-white/5 bg-white/5">
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Account Hub</p>
+                        </div>
+                        <div class="p-2">
+                            <a href="profile.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-indigo-600/20 text-sm font-medium transition group/item">
+                            <i class="fa-solid fa-user-circle text-indigo-400 group-hover/  item:scale-110 transition"></i>
+                        My Profile
+                            </a>
+                         <a href="setting.html" class="flex items-center gap-3 p-3 rounded-xl   hover:bg-white/5 text-sm font-medium transition group/item">
+                        <i class="fa-solid fa-gear text-slate-400 group-hover/item:rotate-90 transition duration-500"></i>
+                        Settings
+                    </a>
+                         </div>
+                     <div class="p-2 border-t border-white/5 bg-black/20">
+                    <button onclick="logout()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-400 text-sm font-bold transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+    <main class="container mx-auto px-6 pt-24 pb-20">
+        <div class="flex flex-col lg:flex-row gap-8 items-start">
+            
+            <!-- LEFT: TEAM LIST (65%) -->
+            <div class="w-full lg:w-[65%] space-y-6">
+                <div class="relative group">
+                    <input type="text" id="teamSearch" onkeyup="filterTeams()" placeholder="Search squads, colleges, or events..." 
+                           class="w-full p-4 pr-14 rounded-2xl shadow-xl">
+                    <i class="fa-solid fa-magnifying-glass absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition"></i>
+                </div>
+                <div id="teamGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4"></div>
+            </div>
+
+            <!-- RIGHT: CREATE TEAM (35%) -->
+            <div class="w-full lg:w-[35%] lg:sticky lg:top-24">
+                <div class="glass-card p-6 border-l-4 border-indigo-500">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-rocket text-indigo-500"></i> Launch Squad
+                    </h3>
+                    <form id="createTeamForm" class="space-y-4">
+                        <input type="text" id="newTeamName" placeholder="Squad Name" required class="w-full p-3 rounded-xl">
+                        <input type="text" id="newEventName" placeholder="Target Event" required class="w-full p-3 rounded-xl">
+                        <input type="text" id="newCollege" placeholder="Campus Name" required class="w-full p-3 rounded-xl">
+                        <textarea id="newRequirements" placeholder="Required Skills (e.g. Python, UI/UX...)" class="w-full p-3 rounded-xl h-20"></textarea>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[9px] uppercase font-black text-slate-500 mb-1 block">Size</label>
+                                <input type="number" id="newSize" min="1" max="10" value="4" class="w-full p-3 rounded-xl">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="button" onclick="toggleAddMemberBox()" class="w-full bg-white/10 hover:bg-white/20 p-3 rounded-xl text-xs font-bold transition">Add Member</button>
+                            </div>
+                        </div>
+
+                        <!-- SIMPLE ADD MEMBER BOX (Fetch simulation) -->
+                        <div id="addMemberSection" class="expand-section bg-indigo-500/5 border border-indigo-500/20 p-4 rounded-2xl space-y-3">
+                            <input type="text" id="tempMemberName" placeholder="Student Name or UserID" class="w-full p-2 rounded-lg text-sm">
+                            <div class="flex gap-2">
+                                <button type="button" onclick="confirmAddMember()" class="flex-1 bg-emerald-600 py-2 rounded-lg text-[10px] font-black uppercase transition">Add to List</button>
+                                <button type="button" onclick="toggleAddMemberBox()" class="px-4 bg-white/5 py-2 rounded-lg text-[10px] font-black uppercase text-slate-400">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="preMemberList" class="flex flex-wrap gap-2 pt-2"></div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-black uppercase tracking-widest mt-4 shadow-xl transition">Form Squad</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 3D SUCCESS POPUP (CENTRE) -->
+    <div id="successPopup" class="fixed inset-0 z-[150] flex items-center justify-center p-4">
+        <div class="glass-card p-10 bg-[#131c31] border-emerald-500 border-2 shadow-[0_0_50px_rgba(16,185,129,0.2)] text-center max-w-sm w-full">
+            <div class="w-20 h-20 bg-emerald-500 rounded-full mx-auto flex items-center justify-center text-4xl mb-6 shadow-lg shadow-emerald-500/30">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h2 class="text-3xl font-black tracking-tighter mb-2">Squad Formed!</h2>
+            <p class="text-slate-400 text-sm">Your team is now live in the StudentVerse ecosystem.</p>
+        </div>
+    </div>
+
+    <!-- TEAM DETAIL MODAL -->
+    <div id="teamModal" class="fixed inset-0 z-[110] backdrop-blur-xl bg-black/70 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-xl hover:text-red-400 transition"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let teams = [
+            { 
+                id: 1, name: "Alpha Coders", event: "SIH 2024", college: "IIT Bombay", current: 3, total: 5, req: "React, Node, MongoDB", 
+                members: [
+                    { name: "Alex (Lead)", skills: ["React", "Figma"], achievements: ["Winner SIH 23"] },
+                    { name: "Nandini", skills: ["Python", "AI"], achievements: ["Hackathon Pro"] }
+                ] 
+            },
+            {
+                id: 2, name: "Design Dynamos", event: "HackTheNorth", college: "IIT Delhi", current: 5, total: 5, req: "UI/UX, Figma, Prototyping", 
+                members: [
+                    { name: "Riya (Lead)", skills: ["UI/UX", "Figma"], achievements: ["Winner HackTheNorth 22"] },
+                    { name: "Soham", skills: ["Prototyping", "Adobe XD"], achievements: ["Design Guru"] },
+                    { name: "Meera", skills: ["User Research", "Wireframing"], achievements: ["UX Enthusiast"] },
+                    { name: "Arjun", skills: ["Visual Design", "Branding"], achievements: ["Creative Mind"] },
+                    { name: "Tara", skills: ["Interaction Design", "Usability Testing"], achievements: ["User Advocate"] }
+                ]
+            },
+            {
+                id: 3, name: "Data Wizards", event: "Kaggle Competition", college: "IIT Madras", current: 2, total: 4, req: "Data Science, Python, ML", 
+                members: [
+                    { name: "Vikram (Lead)", skills: ["Data Science", "Python"], achievements: ["Kaggle Master"] },
+                    { name: "Ananya", skills: ["Machine Learning", "R"], achievements: ["Data Enthusiast"] }
+                ]
+            }
+        ];
+
+        let preAddedMembers = [];
+
+        function renderTeams(data = teams) {
+            const grid = document.getElementById('teamGrid');
+            grid.innerHTML = data.map(t => {
+                const isFull = t.current >= t.total;
+                return `
+                    <div class="glass-card p-6 cursor-pointer group ${isFull ? 'opacity-80' : ''}" onclick="openModal(${t.id})">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[9px] font-black bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full text-indigo-400 uppercase tracking-widest">${t.college}</span>
+                            <span class="text-xs font-bold ${isFull ? 'text-slate-500' : 'text-emerald-400'}">${isFull ? 'FILLED' : (t.total-t.current)+' OPEN'}</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1 tracking-tight group-hover:text-indigo-400 transition">${t.name}</h3>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-[10px] font-black mb-1 uppercase text-slate-500"><span>Load</span><span>${t.current}/${t.total}</span></div>
+                            <div class="progress-bg"><div class="progress-fill" style="width:${(t.current/t.total)*100}%; background:${isFull?'#334155':'linear-gradient(90deg, #6366f1, #a855f7)'}"></div></div>
+                        </div>
+                        <p class="text-xs text-slate-400 italic line-clamp-1">"${t.req}"</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleAddMemberBox() { document.getElementById('addMemberSection').classList.toggle('show'); }
+
+        function confirmAddMember() {
+            const name = document.getElementById('tempMemberName').value;
+            if(!name) return;
+            // Simulated Fetch: In real app, skills/achievements come from Database via name/ID
+            preAddedMembers.push({ 
+                name, 
+                skills: ["Agility", "Coding"], 
+                achievements: ["System Verified Student"] 
+            });
+            document.getElementById('preMemberList').innerHTML += `<span class="bg-indigo-500/20 px-3 py-1 rounded-full text-[10px] font-bold border border-indigo-500/30">${name}</span>`;
+            document.getElementById('tempMemberName').value = "";
+            toggleAddMemberBox();
+        }
+
+        document.getElementById('createTeamForm').onsubmit = (e) => {
+            e.preventDefault();
+            // Pull Admin Data from Profile (localStorage)
+            const adminSkills = localStorage.getItem('sv_user_skills') ? localStorage.getItem('sv_user_skills').split(",") : ["Master Mind"];
+            const adminAchieve = localStorage.getItem('sv_user_achievements') ? localStorage.getItem('sv_user_achievements').split(",") : ["Ecosystem Founder"];
+
+            const team = {
+                id: Date.now(),
+                name: document.getElementById('newTeamName').value,
+                event: document.getElementById('newEventName').value,
+                college: document.getElementById('newCollege').value,
+                req: document.getElementById('newRequirements').value,
+                current: preAddedMembers.length + 1,
+                total: parseInt(document.getElementById('newSize').value),
+                members: [{ name: localStorage.getItem('sv_user_name')+" (Admin)", skills: adminSkills, achievements: adminAchieve }, ...preAddedMembers]
+            };
+            teams.unshift(team); renderTeams(); e.target.reset(); preAddedMembers = []; 
+            document.getElementById('preMemberList').innerHTML = "";
+            
+            // SHOW 3D POPUP
+            const popup = document.getElementById('successPopup');
+            popup.classList.add('active');
+            setTimeout(() => popup.classList.remove('active'), 2500);
+        };
+
+        function openModal(id) {
+            const t = teams.find(team => team.id === id);
+            const isFull = t.current >= t.total;
+            document.getElementById('modalContent').innerHTML = `
+                <h2 class="text-4xl font-black tracking-tighter mb-2">${t.name}</h2>
+                <p class="text-indigo-400 font-bold uppercase text-xs tracking-widest mb-8">${t.event} • ${t.college}</p>
+                <div class="mb-8 text-center">
+                    <h4 class="text-[10px] font-black text-indigo-400 mb-4 uppercase tracking-widest">Select Member for Profile Insight</h4>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        ${t.members.map((m, i) => `<div onclick="showMemberInsight('${i}', ${t.id})" class="member-badge bg-white/5 px-4 py-2 rounded-xl text-xs font-bold border border-white/10"><i class="fa-solid fa-user-graduate mr-2 text-indigo-400"></i> ${m.name}</div>`).join('')}
+                    </div>
+                </div>
+                <div id="insightPanel" class="hidden glass-card p-6 bg-indigo-600/10 border-indigo-500/30 mb-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <h5 id="insightName" class="text-xl font-black tracking-tighter mb-4 text-indigo-300">Profile</h5>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><p class="text-[9px] uppercase font-black text-slate-500 mb-1">Skills</p><div id="insightSkills" class="flex flex-wrap gap-1"></div></div>
+                        <div><p class="text-[9px] uppercase font-black text-slate-500 mb-1">Successes</p><div id="insightAchieve" class="text-[10px] text-slate-300"></div></div>
+                    </div>
+                </div>
+                <button ${isFull?'disabled':''} class="w-full ${isFull?'bg-slate-800 text-slate-500':'bg-indigo-600 shadow-2xl'} py-4 rounded-2xl font-black uppercase tracking-widest">${isFull?'Recruitment Closed':'Apply to Vacancy'}</button>
+            `;
+            document.getElementById('teamModal').classList.remove('hidden');
+        }
+
+        function showMemberInsight(idx, teamId) {
+            const m = teams.find(t => t.id === teamId).members[idx];
+            document.getElementById('insightName').innerText = m.name;
+            document.getElementById('insightSkills').innerHTML = m.skills.map(s => `<span class="bg-indigo-600/30 px-2 py-0.5 rounded text-[9px] font-bold border border-indigo-500/50">${s}</span>`).join('');
+            document.getElementById('insightAchieve').innerHTML = m.achievements.map(a => `<p>🏆 ${a}</p>`).join('');
+            document.getElementById('insightPanel').classList.remove('hidden');
+        }
+        function startTeamCall(teamName) {
+            const domain = "meet.jit.si";
+            const options = {
+                roomName: "BrainBridge_" + teamName.replace(/\s/g, ''),
+                width: "100%",
+                height: 700,
+                parentNode: document.querySelector('#chatArea'), // Or a new Modal
+                userInfo: { displayName: localStorage.getItem('sv_user_name') }
+           };
+           const api = new JitsiMeetExternalAPI(domain, options);
+        }
+
+        const userName = localStorage.getItem('sv_user_name') || "Student";
+        document.getElementById('displayUserName').innerText = userName;
+        document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+        document.getElementById('userInitial').innerText = userName[0].toUpperCase();
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebarOverlay').style.display === 'block' ? 'none' : 'block'; }
+        function closeModal() { document.getElementById('teamModal').classList.add('hidden'); }
+        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+        function filterTeams() { 
+            const q = document.getElementById('teamSearch').value.toLowerCase();
+            renderTeams(teams.filter(t => t.name.toLowerCase().includes(q) || t.event.toLowerCase().includes(q)));
+        }
+        renderTeams();
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Forge | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --accent: #a855f7; --bg-dark: #0f172a; }
+        body { background: var(--bg-dark); color: white; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        /* High-End Glassmorphism */
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .glass-card:hover { transform: translateY(-8px) scale(1.01); border-color: var(--primary); box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3); background: rgba(255, 255, 255, 0.06); }
+        
+        .nav-blur { backdrop-filter: blur(20px); background: rgba(15, 23, 42, 0.85); }
+        #sidebar { transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1); z-index: 100; }
+        .sidebar-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; }
+
+        /* Dynamic Tabs */
+        .forge-tab.active { color: #6366f1; border-bottom: 2px solid #6366f1; text-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+        
+        /* Custom Inputs for Submission Terminal */
+        input, textarea, select { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; font-size: 0.875rem !important; }
+        input:focus { border-color: var(--primary) !important; outline: none; box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- SIDEBAR -->
+    <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 z-[90]" onclick="toggleSidebar()"></div>
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full z-[100] shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-2xl font-extrabold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Menu</h2>
+            <button onclick="toggleSidebar()"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <nav class="space-y-4 text-slate-400 font-bold">
+            <a href="dashboard.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-chart-line w-8 text-indigo-400"></i> Dashboard</a>
+            <a href="college.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-university w-8 text-indigo-400"></i> Search College</a>
+            <a href="team.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-users-gear w-8 text-indigo-400"></i> Team Formation</a>
+            <a href="project.html" class="flex items-center p-3 rounded-xl bg-indigo-600/20 text-indigo-400 font-black"><i class="fa-solid fa-fire w-8"></i> Event Management</a>
+            <a href="communication.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-comments w-8 text-indigo-400"></i> Communication</a>
+            <a href="feedback.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-message w-8 text-indigo-400"></i> Feedback</a>
+            <hr class="border-white/5">
+            <a href="profile.html" class="flex items-center p-3 rounded-xl hover:bg-white/5 transition"><i class="fa-solid fa-user w-8 text-indigo-400"></i> My Profile</a>
+            <button onclick="logout()" class="w-full text-left p-3 text-red-400"><i class="fa-solid fa-right-from-bracket w-8"></i> Logout</button>
+        </nav>
+    </div>
+
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition"><i class="fa-solid fa-bars-staggered"></i></button>
+                <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
+            </div>
+            <div id="userBadge" class="flex items-center gap-4">
+                <div class="text-right hidden sm:block">
+                    <p id="h_userId" class="text-[9px] font-mono text-indigo-400 font-black tracking-widest leading-none">ID_0421</p>
+                    <p id="h_userName" class="text-xs font-bold text-white mt-1">Username</p>
+                </div>
+                <div id="h_avatar" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black shadow-lg">U</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FLOATING SUBMISSION TERMINAL BUTTON -->
+    <button onclick="openTerminal()" class="fixed bottom-10 right-10 z-[80] bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-5 rounded-3xl shadow-[0_20px_40px_rgba(99,102,241,0.4)] flex items-center gap-4 transition-all hover:scale-110 active:scale-95 group">
+        <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-45 transition-transform duration-500"></i>
+        <span class="font-black uppercase text-xs tracking-widest">Forge Entry</span>
+    </button>
+
+    <main class="container mx-auto px-6 pt-32">
+        
+        <!-- TITLE & TAB NAVIGATOR -->
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-8 mb-16">
+            <div>
+                <h2 class="text-5xl font-black tracking-tighter">Ecosystem <span class="text-indigo-500">Forge</span></h2>
+                <p class="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] mt-2">Connecting visionaries with opportunities</p>
+            </div>
+            <div class="glass-card p-2 flex gap-4">
+                <button onclick="switchCategory('events')" id="cat-events" class="forge-tab active px-6 py-2 font-black uppercase text-[10px] tracking-widest transition">Live Events</button>
+                <button onclick="switchCategory('updates')" id="cat-updates" class="forge-tab px-6 py-2 font-black uppercase text-[10px] tracking-widest transition">Campus News</button>
+                <button onclick="switchCategory('projects')" id="cat-projects" class="forge-tab px-6 py-2 font-black uppercase text-[10px] tracking-widest transition">Student Projects</button>
+            </div>
+        </div>
+
+        <!-- MAIN GRID CONTAINER -->
+        <div id="forgeGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <!-- Cards Rendered via JS -->
+        </div>
+
+    </main>
+
+    <!-- LAYER 1: DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 z-[110] backdrop-blur-2xl bg-black/80 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full p-0 relative overflow-hidden shadow-2xl border-indigo-500 border-t-8">
+            <button onclick="closeModal('detailModal')" class="absolute top-6 right-6 text-xl text-white z-50 transition hover:rotate-90"><i class="fa-solid fa-xmark"></i></button>
+            <div id="detailContent" class="max-h-[85vh] overflow-y-auto custom-scroll p-10"></div>
+        </div>
+    </div>
+
+    <!-- LAYER 2: FORGE SUBMISSION TERMINAL -->
+    <div id="terminalModal" class="fixed inset-0 z-[120] backdrop-blur-3xl bg-black/90 hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full p-10 shadow-2xl border-t-8 border-indigo-600">
+            <h2 class="text-3xl font-black mb-1 tracking-tighter">Forge <span class="text-indigo-500">Console</span></h2>
+            <p class="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-8">System Entry Submission</p>
+            
+            <div class="flex gap-4 mb-10 bg-white/5 p-2 rounded-2xl">
+                <button onclick="switchMode('event')" id="mode-ev" class="flex-1 py-3 rounded-xl bg-indigo-600 font-black text-[10px] uppercase">Add Event</button>
+                <button onclick="switchMode('project')" id="mode-pj" class="flex-1 py-3 rounded-xl hover:bg-white/5 font-black text-[10px] uppercase text-slate-500">Add Project</button>
+                <button onclick="switchMode('update')" id="mode-up" class="flex-1 py-3 rounded-xl hover:bg-white/5 font-black text-[10px] uppercase text-slate-500">Post News</button>
+            </div>
+
+            <form id="terminalForm" onsubmit="handleForgeSubmit(event)" class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scroll">
+                <!-- Inputs dynamic based on mode -->
+            </form>
+
+            <div class="mt-8 flex gap-4">
+                <button onclick="closeModal('terminalModal')" class="flex-1 py-4 text-slate-500 font-bold uppercase text-[10px]">Close Console</button>
+                <button type="submit" form="terminalForm" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl transition">Execute Forge</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DUMMY DATA ---
+        const forgeData = {
+            events: [
+                { id:1, type:'event', title: "CodeCraft 25", organizer: "PCCOER", fee: "₹250", elig: "Engineering UG", date: "Oct 12", venue: "Main Lab 1", helpline: "it.pccoer@edu.in", desc: "A 24-hour algorithmic sprint focused on AI optimization.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600" },
+                { id:2, type:'event', title: "Canvas War", organizer: "Stanford Art", fee: "Free", elig: "Open to All", date: "Nov 05", venue: "Digital Hall", helpline: "arts@stanford.edu", desc: "Poster making and digital art battle for creative students.", rulebook: "#", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600" },
+                { id:3, type:'event', title: "Eco Innovate", organizer: "IIT Bombay", fee: "₹100", elig: "All College Students", date: "Dec 01", venue: "IITB Auditorium", helpline: "hacks@iitb.ac.in", desc: "A competition to promote sustainable innovation and eco-friendly solutions.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1504608520683-56358281c19d?q=80&w=600" },
+                { id:4, type:'event', title: "RoboRumble", organizer: "MIT Pune", fee: "₹300", elig: "Engineering UG", date: "Jan 15", venue: "MIT Sports Complex", helpline: "hacks@mitpune.ac.in", desc: "A robotics competition for engineering students.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1550745264-8ce799a227d3?q=80&w=600" },
+                {
+                    id:5, type:'event', title: "Hack the Future", organizer: "IIIT Hyderabad", fee: "₹150", elig: "All College Students", date: "Feb 20", venue: "IIIT-H Campus", helpline: "hacks@iiit.ac.in", desc: "A hackathon for students to build innovative solutions.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=600" },
+                { id:6, type:'event', title: "DesignX", organizer: "NID Ahmedabad", fee: "Free", elig: "Open to All", date: "Mar 10", venue: "NID Design Studio", helpline: "arts@nid.edu.in", desc: "A design competition for creative students.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=600" },
+                { id:7, type:'event', title: "DataDive", organizer: "IIT Madras", fee: "₹200", elig: "Engineering UG", date: "Apr 05", venue: "IITM Computer Center", helpline: "hacks@iitm.ac.in", desc: "A data science competition for students.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=600" },
+                { id:8, type:'event', title: "CodeCraft 26", organizer: "PCCOER", fee: "₹250", elig: "Engineering UG", date: "May 15", venue: "Main Lab 1", helpline: "it.pccoer@edu.in", desc: "A 24-hour algorithmic sprint focused on AI optimization.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600" },
+                { id:9, type:'event', title: "Canvas War 2.0", organizer: "Stanford Art", fee: "Free", elig: "Open to All", date: "Jun 10", venue: "Digital Hall", helpline: "arts@stanford.edu", desc: "An updated version of the popular poster making competition.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600" },
+                { id:10, type:'event', title: "Eco Innovate 2.0", organizer: "IIT Bombay", fee: "₹100", elig: "All College Students", date: "Jul 20", venue: "IITB Auditorium", helpline: "hacks@iitb.ac.in", desc: "An updated version of the popular eco-friendly innovation competition.", rulebook: "https://example.com/rules", img: "https://images.unsplash.com/photo-1504608520683-56358281c19d?q=80&w=600" }
+            ],
+            updates: [
+                { id:101, type:'update', title: "SIH Results Out", college: "IIT Bombay", time: "2h ago", text: "Team 'Alpha' from IITB has secured a position in the Top 5 for Smart India Hackathon finals." },
+                { id:102, type:'update', title: "Registration Extended", college: "MIT Pune", time: "5h ago", text: "Last date to register for Mood Indigo competitions has been extended to Oct 15th." },
+                { id:103, type:'update', title: "New Lab Inaugurated", college: "IIT Madras", time: "1d ago", text: "IITM has inaugurated a new AI and Robotics lab for student research and projects." },
+                { id:104, type:'update', title: "Hackathon Winners", college: "IIIT Hyderabad", time: "3d ago", text: "Team 'Beta' from IIIT-H has won the 'Hack the Future' hackathon with an innovative healthcare solution." },
+                { id:105, type:'update', title: "DesignX Highlights", college: "NID Ahmedabad", time: "5d ago", text: "The DesignX competition showcased incredible talent with over 200 entries from across the country." },
+                { id:106, type:'update', title: "DataDive Insights", college: "IIT Madras", time: "1w ago", text: "The DataDive competition revealed fascinating insights into student preferences and trends in data science." },
+                { id:107, type:'update', title: "Canvas War Winners", college: "Stanford Art", time: "2w ago", text: "The Canvas War competition concluded with stunning artworks, and the winners have been announced." },
+                { id:108, type:'update', title: "Eco Innovate Success", college: "IIT Bombay", time: "3w ago", text: "The Eco Innovate competition was a huge success, with many innovative solutions for sustainability." },
+                { id:109, type:'update', title: "RoboRumble Recap", college: "MIT Pune", time: "1mo ago", text: "The RoboRumble competition showcased incredible robotics talent from engineering students." },
+                { id:110, type:'update', title: "CodeCraft Highlights", college: "PCCOER", time: "1mo ago", text: "The CodeCraft 25 event was a thrilling 24-hour coding marathon with impressive projects and innovations." },
+                { id:111, type:'update', title: "SIH Finals Announcement", college: "IIT Bombay", time: "2mo ago", text: "The finalists for the Smart India Hackathon have been announced, with teams from across the country competing for the top spot." },
+                { id:112, type:'update', title: "Mood Indigo Lineup", college: "MIT Pune", time: "2mo ago", text: "The lineup for Mood Indigo has been revealed, featuring exciting events and performances for students." }
+            ],
+            projects: [
+                { id:201, type:'project', title: "EcoLens AI", lead: "Aryan K.", status: "75%", vacancy: "React Developer", members: ["Aryan (Lead)", "Sneha (ML)"], desc: "An AI-powered app to track personal carbon footprint using image recognition." },
+                { id:202, type:'project', title: "CampusConnect", lead: "Priya S.", status: "60%", vacancy: "Flutter Developer", members: ["Priya (Lead)", "Rahul (Backend)"], desc: "A mobile app to connect students with campus events and resources." },
+                { id:203, type:'project', title: "HealthGuard", lead: "Vikram D.", status: "80%", vacancy: "Data Scientist", members: ["Vikram (Lead)", "Anjali (Frontend)"], desc: "A health monitoring system using wearable devices and AI analytics." },
+                { id:204, type:'project', title: "EduBot", lead: "Sanya M.", status: "50%", vacancy: "AI Researcher", members: ["Sanya (Lead)", "Karan (Backend)"], desc: "An AI chatbot to assist students with academic queries and resources." },
+                { id:205, type:'project', title: "GreenThumb", lead: "Rohit P.", status: "70%", vacancy: "Mobile Developer", members: ["Rohit (Lead)", "Meera (Design)"], desc: "An app to promote urban gardening and sustainable living among students." }
+            ]
+        };
+
+        // --- CORE UI LOGIC ---
+        let currentCategory = 'events';
+        let submissionMode = 'event';
+
+        function init() {
+            const name = localStorage.getItem('sv_user_name') || "Student";
+            document.getElementById('h_userName').innerText = name;
+            document.getElementById('h_userId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+            document.getElementById('h_avatar').innerText = name[0].toUpperCase();
+            renderGrid();
+        }
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.forge-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`cat-${cat}`).classList.add('active');
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('forgeGrid');
+            const data = forgeData[currentCategory];
+            
+            if(currentCategory === 'events') {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8";
+                grid.innerHTML = data.map(e => `
+                    <div class="glass-card p-6 flex gap-6 cursor-pointer" onclick="openEventDetail(${e.id})">
+                        <div class="w-1 bg-indigo-600 rounded-full h-full"></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="text-[9px] font-black uppercase text-indigo-400 tracking-widest">${e.organizer}</span>
+                                <span class="bg-indigo-600/10 border border-indigo-600/20 text-indigo-400 text-[8px] font-black px-2 py-1 rounded uppercase">${e.date}</span>
+                            </div>
+                            <h3 class="text-xl font-black mb-2 tracking-tight group-hover:text-indigo-400">${e.title}</h3>
+                            <p class="text-slate-400 text-xs line-clamp-2 italic mb-6">"${e.desc}"</p>
+                            <div class="grid grid-cols-2 gap-2 text-[9px] font-black uppercase text-slate-500">
+                                <span><i class="fa-solid fa-location-dot text-indigo-500 mr-2"></i>${e.venue}</span>
+                                <span><i class="fa-solid fa-tag text-indigo-500 mr-2"></i>${e.fee}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } 
+            else if(currentCategory === 'updates') {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
+                grid.innerHTML = data.map(u => `
+                    <div class="glass-card p-8 border-l-4 border-emerald-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-emerald-400 font-black text-[10px] uppercase tracking-widest">${u.college}</span>
+                            <span class="text-slate-500 text-[9px]">${u.time}</span>
+                        </div>
+                        <h4 class="text-xl font-bold mb-3">${u.title}</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">${u.text}</p>
+                    </div>
+                `).join('');
+            }
+            else {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8";
+                grid.innerHTML = data.map(p => `
+                    <div class="glass-card p-8 group cursor-pointer" onclick="openProjectDetail(${p.id})">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-indigo-400 border border-white/10 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xl"><i class="fa-solid fa-code-branch"></i></div>
+                            <span class="bg-emerald-500/10 text-emerald-400 text-[8px] font-black uppercase px-3 py-1 rounded-full border border-emerald-500/20 shadow-[0_0_10px_#10b98155]">Project Live</span>
+                        </div>
+                        <h3 class="text-2xl font-black mb-1">${p.title}</h3>
+                        <p class="text-slate-500 text-xs font-bold uppercase mb-6 tracking-widest">By ${p.lead}</p>
+                        <div class="mb-6 flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Hiring</span>
+                            <span class="text-[10px] font-bold text-indigo-400">${p.vacancy}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // --- SUBMISSION LOGIC ---
+        function openTerminal() { document.getElementById('terminalModal').classList.remove('hidden'); switchMode('event'); }
+        
+        function switchMode(mode) {
+            submissionMode = mode;
+            const form = document.getElementById('terminalForm');
+            document.querySelectorAll('#mode-ev, #mode-pj, #mode-up').forEach(b => b.className = "flex-1 py-3 rounded-xl hover:bg-white/5 font-black text-[10px] uppercase text-slate-500");
+            document.getElementById(`mode-${mode.substring(0,2)}`).className = "flex-1 py-3 rounded-xl bg-indigo-600 font-black text-[10px] uppercase text-white shadow-lg shadow-indigo-600/30";
+
+            if(mode === 'event') {
+                form.innerHTML = `
+                    <input type="text" placeholder="Impactful Event Title" required class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="College Organizing" required class="w-full p-4 rounded-xl">
+                    <div class="grid grid-cols-2 gap-4"><input type="date" class="w-full p-4 rounded-xl"><input type="time" class="w-full p-4 rounded-xl"></div>
+                    <input type="text" placeholder="Venue / Platform" class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Eligibility (e.g. 1st - 4th Year)" class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Entry Fee (e.g. ₹200 or Free)" class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Helpline Email / Number" class="w-full p-4 rounded-xl">
+                    <input type="url" placeholder="Rulebook URL / Official Site" class="w-full p-4 rounded-xl">
+                    <input type="url" placeholder="Direct Banner Image URL" class="w-full p-4 rounded-xl">
+                    <textarea placeholder="Deep Dive Description of the Event" class="w-full p-4 rounded-xl h-32"></textarea>
+                `;
+            } else if(mode === 'project') {
+                form.innerHTML = `
+                    <input type="text" placeholder="Project Core Name" required class="w-full p-4 rounded-xl">
+                    <textarea placeholder="Problem Statement & Proposed Solution" class="w-full p-4 rounded-xl h-32"></textarea>
+                    <input type="text" placeholder="Required Team Members (Skills)" class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Current Development Progress (%)" class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Vacant Role (if any)" class="w-full p-4 rounded-xl">
+                `;
+            } else {
+                form.innerHTML = `
+                    <input type="text" placeholder="Announcement Headline" required class="w-full p-4 rounded-xl">
+                    <input type="text" placeholder="Campus of Origin" required class="w-full p-4 rounded-xl">
+                    <textarea placeholder="Write the update details here..." class="w-full p-4 rounded-xl h-32"></textarea>
+                    <input type="url" placeholder="Direct Poster URL" class="w-full p-4 rounded-xl">
+
+                `;
+            }
+        }
+
+        function handleForgeSubmit(e) { e.preventDefault(); alert("System Execution Successful: Submission Pushed to Ecosystem Verification Hub."); closeModal('terminalModal'); }
+
+        // --- DETAIL MODALS ---
+        function openEventDetail(id) {
+            const e = forgeData.events.find(x => x.id === id);
+            document.getElementById('detailContent').innerHTML = `
+                <img src="${e.img}" class="w-full h-56 object-cover rounded-3xl mb-8">
+                <h2 class="text-4xl font-black mb-1">${e.title}</h2>
+                <p class="text-indigo-400 font-black uppercase text-xs mb-8 tracking-[0.2em]">${e.organizer}</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white/5 p-4 rounded-2xl"><p class="text-[8px] text-slate-500 font-black uppercase">Fee</p><p class="text-sm font-bold text-emerald-400">${e.fee}</p></div>
+                    <div class="bg-white/5 p-4 rounded-2xl"><p class="text-[8px] text-slate-500 font-black uppercase">Mode</p><p class="text-sm font-bold uppercase">${e.mode}</p></div>
+                    <div class="bg-white/5 p-4 rounded-2xl"><p class="text-[8px] text-slate-500 font-black uppercase">Venue</p><p class="text-sm font-bold">${e.venue}</p></div>
+                </div>
+                <div class="bg-white/5 p-6 rounded-3xl mb-8 border border-white/5">
+                    <p class="text-sm text-slate-300 leading-relaxed">${e.desc}</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/5"><p class="text-[8px] text-slate-500 font-black uppercase">Eligibility</p><p class="text-xs font-bold text-indigo-400">${e.elig}</p></div>
+                    <div class="bg-white/5 p-4 rounded-2xl border border-white/5"><p class="text-[8px] text-slate-500 font-black uppercase">Contact Help</p><p class="text-xs font-bold text-indigo-400">${e.helpline}</p></div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="${e.rulebook}" class="flex-1 bg-white/5 text-center py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest border border-white/5 transition hover:bg-white/10">Rulebook</a>
+                    <button onclick="alert('Proceeding to ecosystem wallet...')" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black uppercase tracking-widest shadow-2xl transition">Register Entry</button>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function openProjectDetail(id) {
+            const p = forgeData.projects.find(x => x.id === id);
+            document.getElementById('detailContent').innerHTML = `
+                <h2 class="text-4xl font-black mb-1">${p.title}</h2>
+                <p class="text-indigo-400 font-black uppercase text-xs mb-8 tracking-[0.2em]">Research Lead: ${p.lead}</p>
+                <div class="bg-white/5 p-6 rounded-3xl mb-8 border border-white/5">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-2">Abstract</h4>
+                    <p class="text-sm text-slate-300 leading-relaxed italic">"${p.desc}"</p>
+                </div>
+                <div class="bg-white/5 p-6 rounded-3xl mb-8">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4">Core Squad</h4>
+                    <div class="flex flex-wrap gap-4">
+                        ${p.members.map(m => `<span class="bg-indigo-600/10 border border-indigo-600/20 px-4 py-2 rounded-xl text-xs font-bold text-indigo-400">${m}</span>`).join('')}
+                    </div>
+                </div>
+                <button onclick="alert('Application pushed to Lead!')" class="w-full bg-emerald-600 hover:bg-emerald-500 py-4 rounded-2xl font-black uppercase tracking-widest shadow-2xl transition">Apply for: ${p.vacancy}</button>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // --- GLOBALS ---
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('sidebarOverlay').style.display = document.getElementById('sidebarOverlay').style.display === 'block' ? 'none' : 'block'; }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+        init();
+    </script>
+</body>
+</html>
