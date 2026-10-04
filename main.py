@@ -823,6 +823,10 @@ async def connection_request(data: dict = Body(...)):
     })
     return {"status": "Request Transmitted"}
 
+@app.get("/")
+async def root():
+    return {"status": "online", "message": "BrainBridge API is live and running!"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)

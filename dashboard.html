@@ -366,13 +366,13 @@
     </div>
 
     <script>
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://brainbridge-api.onrender.com";
 const userId = localStorage.getItem('sv_user_id');
 
 // --- 1. CORE DATA SYNC ---
 async function refreshDashboard() {
     try {
-        const stats = await (await fetch(`http://127.0.0.1:8000/api/stats`)).json();
+        const stats = await (await fetch(`https://brainbridge-api.onrender.com/api/stats`)).json();
         document.querySelectorAll('.stat-num').forEach((el, i) => {
             if(i==0) el.innerText = stats.users.toLocaleString();
             if(i==1) el.innerText = stats.teams;
@@ -380,7 +380,7 @@ async function refreshDashboard() {
         });
 
         // NOTIFICATIONS
-        const notifs = await (await fetch(`http://127.0.0.1:8000/api/notifications`)).json();
+        const notifs = await (await fetch(`https://brainbridge-api.onrender.com/api/notifications`)).json();
         document.querySelector('.notif-dropdown .max-h-[450px]').innerHTML = notifs.map(n => `
             <div class="p-4 border-b border-white/5 bg-indigo-500/5 animate-pulse">
                 <p class="text-[11px] font-bold">${n.message}</p>
@@ -389,7 +389,7 @@ async function refreshDashboard() {
         `).join('');
 
         // REAL EVENTS INTO THE UPCOMING GRID
-        const realEvents = await (await fetch(`http://127.0.0.1:8000/api/forge/list?category=event`)).json();
+        const realEvents = await (await fetch(`https://brainbridge-api.onrender.com/api/forge/list?category=event`)).json();
         const grid = document.getElementById('upcoming-grid');
         if(realEvents.length > 0) {
             grid.innerHTML = realEvents.map(e => `

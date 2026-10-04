@@ -454,7 +454,7 @@
             e.preventDefault();
             if(score === 0) return alert("Select at least 1 star!");
 
-            const res = await fetch('http://127.0.0.1:8000/api/feedback', {
+            const res = await fetch('https://brainbridge-api.onrender.com/api/feedback', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ 
