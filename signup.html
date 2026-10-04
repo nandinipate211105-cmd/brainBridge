@@ -191,6 +191,7 @@
                         password: document.getElementById('password').value 
                     })
                 });
+
                 const data = await res.json();
                 if(res.ok) {
                     localStorage.setItem('sv_user_name', data.name);

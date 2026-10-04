@@ -567,7 +567,8 @@ app.add_middleware(
 
 # --- DB & SECURITY ---
 # Using Localhost for development; Bypassing SSL cert issues on Windows
-client = AsyncIOMotorClient("mongodb://127.0.0.1:27017", tlsAllowInvalidCertificates=True)
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb://127.0.0.1:27017")
+client = AsyncIOMotorClient(MONGO_URL, tlsAllowInvalidCertificates=True)
 db = client["studentverse"]
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
