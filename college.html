@@ -174,551 +174,562 @@
     </div>
 
     <script>
-        const allColleges = [
-            { 
-                name: "IIT Bombay", field: "BTech", location: "Mumbai", students: 2100, 
-                events: [
-                    { id: 101, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Jan 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                    { id: 102, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Jan 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                    { id: 103, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Jan 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                ] 
-            },
-            { 
-                name: "MIT Pune", field: "BTech", location: "Pune", students: 450, 
-                events: [
-                    { id: 201, title: "CodeCraft", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 15", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                    { id: 202, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Nov 16", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                ] 
-            },
-            { 
-                name: "AIIMS Delhi", field: "MBBS", location: "Delhi", students: 600, 
-                events: [
-                    { id: 501, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Sept 10", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
-                ] 
-            },
-            {
-                name:"PCCOER", field:"BTech", location:"Pune", students: 350,
-                events: [
-                    { id: 601, title: "RoboWars", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf9j7biTnGmqQRMo5Z6GNgxYO_WQ0HTHHANQ&s", fee: "₹250", criteria: "All", date: "Oct 20", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                    { id: 602, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 22", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                    { id: 603, title: " Kurukshetra", img: "https://internshala-competitions.s3.ap-south-1.amazonaws.com/competitions/wp-content/uploads/2026/04/06115817/Kurukshetra-2026-1024x683.png", fee: "₹150", criteria: "Gamers", date: "Oct 25", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                    { id: 604, title: "Electrothon", img: "https://electrothon-5.devfolio.co/_next/image?url=https%3A%2F%2Fassets.devfolio.co%2Fhackathons%2F2e7cc51465be427f8fc881020d01ebf1%2Fassets%2Fcover%2F566.png&w=1440&q=100", fee: "₹200", criteria: "All", date: "Oct 28", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                    { id: 605, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Oct 30", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                    { id: 606, title: "Quantibid", img: "https://d8it4huxumps7.cloudfront.net/uploads/images/opportunity/mobile_banner/69cff3a17df82_quantbid-arena.png", fee: "₹150", criteria: "All", date: "Nov 1", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                ]
-            },
-            { 
-                name: "VIT Pune", field: "BTech", location: "Pune", students: 500, 
-                events: [
-                    { id: 701, title: "InnovateX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Nov 10", cat: "Innovation", icon: "fa-lightbulb", desc: "Showcase your innovative projects and ideas." },
-                    { id: 702, title: "Crescendo", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 12", cat: "Technical", icon: "fa-code", desc: "24-hour hackathon with exciting problem statements." }
-                ] 
-            },
-            {
-                name: "Symbiosis Law School", field: "Law", location: "Pune", students: 400, 
-                events: [
-                    { id: 801, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
-                    { id: 802, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
-                ]
-            },
-            {
-                name: "PICT Pune", field: "BTech", location: "Pune", students: 300,
-                events: [
-                    { id: 901, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                    { id: 902, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                ]
-            },
-            {
-                name: "Cummins College", field: "BTech", location: "Pune", students: 250,
-                events: [
-                    { id: 1001, title: "MechX", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "Mechanical", date: "Dec 1", cat: "Mechanical", icon: "fa-cogs", desc: "Challenges in mechanical design and robotics." },
-                    { id: 1002, title: "AutoDrive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "Automobile", date: "Dec 3", cat: "Automobile", icon: "fa-car-side", desc: "Design and race autonomous vehicles." },
-                    { id: 1003, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 5", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                    { id: 1004, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Dec 7", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-             ]
-            },
-            {
-                name: "MIT World Peace University", field: "BTech", location: "Pune", students: 400,
-                events: [
-                    { id: 1101, title: "PeaceTech", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 10", cat: "Innovation", icon: "fa-dove", desc: "Innovative solutions for global peace and sustainability." },
-                    { id: 1102, title: "Code for Earth", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-globe-americas", desc: "Hackathon focused on environmental challenges." }
-                ]
-            },
-            {
-                name: "SIT Pune", field: "BTech", location: "Pune", students: 350,
-                events: [
-                    { id: 1201, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                    { id: 1202, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Dec 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                ]
-            },
-            {
-                name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Pimpri", students: 300,
-                events: [
-                    { id: 1301, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                    { id: 1302, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                ]
-            },
-            {
-                    name: "College of Engineering Pune", field: "BTech", location: "Pune", students: 550,
-                    events: [
-                        { id: 1501, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 1502, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Feb 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                    ]
-                },
-                {
-                    name: "Army Institute of Technology", field: "BTech", location: "Pune", students: 400,
-                    events: [
-                        { id: 1601, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Feb 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                        { id: 1602, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Feb 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                    ]
-                },
-                {
-                    name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Akurdi", students: 300,
-                    events: [
-                        { id: 1701, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 1702, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                    ]
-                },
-                {
-                    name: "Sinhgad College of Engineering", field: "BTech", location: "Pune", students: 450,
-                        events: [
-                        { id: 1801, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Mar 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                        { id: 1802, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                        { id: 1803, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Mar 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                        { id: 1804, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                        { id: 1805, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 1806, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Mar 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                    ]
-                },
-                { 
-                    name: "AIMS Nagpur", field: "MBBS", location: "Nagpur", students: 500,
-                    events: [
-                        { id: 1901, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Mar 25", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
-                     ]
-                },
-                {
-                    name: "IIT Delhi", field: "BTech", location: "Delhi", students: 2000, 
-                    events: [
-                        { id: 2001, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Apr 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2002, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Apr 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2003, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Apr 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                { 
-                    name: "IIT Madras", field: "BTech", location: "Chennai", students: 1800, 
-                    events: [
-                        { id: 2101, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "May 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2102, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "May 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2103, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "May 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                {
-                    name: "IIT Kanpur", field: "BTech", location: "Kanpur", students: 1600, 
-                    events: [
-                        { id: 2201, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "June 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2202, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "June 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2203, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "June 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                {
-                    name: "IIT Roorkee", field: "BTech", location: "Roorkee", students: 1400, 
-                    events: [
-                        { id: 2301, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "July 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2302, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "July 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2303, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "July 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                { 
-                    name: "IIT Guwahati", field: "BTech", location: "Guwahati", students: 1200, 
-                    events: [
-                        { id: 2401, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Aug 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2402, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Aug 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2403, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Aug 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                {
-                    name: "IIT Hyderabad", field: "BTech", location: "Hyderabad", students: 1000, 
-                    events: [
-                        { id: 2501, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Sept 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
-                        { id: 2502, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Sept 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
-                        { id: 2503, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Sept 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
-                    ]
-                },
-                {
-                    name: "AIMS Delhi", field: "MBBS", location: "Delhi", students: 600, 
-                    events: [
-                        { id: 2601, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Sept 10", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
-                 ]
-                },
-                {
-                    name: "FC Law college", field: "Law", location: "Pune", students: 600,
-                    events: [
-                        { id: 2701, title: "Moot Court", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 10", cat: "Academic", icon: "fa-gavel", desc: "International legal simulation." },
-                        { id: 2702, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 12", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
-                        { id: 2703, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Oct 14", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
-                    ]
-                },
-                {
-                    name: "Symbiosis Law School", field: "Law", location: "Pune", students: 400, 
-                    events: [
-                        { id: 2801, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
-                        { id: 2802, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
-                    ]
-                },
-                {
-                    name: "NFSU Gandhinagar", field: "Agriculture", location: "Gandhinagar", students: 350,
-                    events: [
-                        { id: 2901, title: "AgriTech Expo", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 20", cat: "Agriculture", icon: "fa-seedling", desc: "Showcasing innovations in agriculture and sustainability." },
-                        { id: 2902, title: "Farmers' Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Oct 22", cat: "Agriculture", icon: "fa-tractor", desc: "Problem-solving competition for agricultural challenges." }
-                     ]
-                },
-                {
-                    name: "Bharti Vidyapeeth College", field: "BTech", location: "Pune", students: 450,
-                    events: [
-                        { id: 3001, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 3002, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                     ]
-                },
-                { 
-                    name: "Walchand College", field: "BTech", location: "Sangli", students: 300,
-                    events: [ 
-                        { id: 3101, title: "MechX", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "Mechanical", date: "Dec 1", cat: "Mechanical", icon: "fa-cogs", desc: "Challenges in mechanical design and robotics." },
-                        { id: 3102, title: "AutoDrive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "Automobile", date: "Dec 3", cat: "Automobile", icon: "fa-car-side", desc: "Design and engineering competition for automobile enthusiasts." },
-                        { id: 3103, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 5", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 3104, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Dec 7", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                  ]
-                },
-                {
-                    name: " DJSCE Mumbai", field: "BTech", location: "Mumbai", students: 400,
-                    events: [
-                        { id: 3201, title: "PeaceTech", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 10", cat: "Innovation", icon: "fa-dove", desc: "Innovative solutions for global peace and sustainability." },
-                        { id: 3202, title: "Code for Earth", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-globe-americas", desc: "Hackathon focused on environmental challenges." }
-                     ]
-                },
-                {
-                    name: " MMCC Pune", field: "BTech", location: "Pune", students: 350,
-                    events: [
-                        { id: 3301, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                        { id: 3302, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Dec 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                     ]
-                },
-                {
-                    name: "HVPM Pune", field: "BTech", location: "Pune", students: 300,
-                    events: [
-                        { id: 3401, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 3402, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                     ]
-                },
-                { 
-                    name: "PVG Pune", field: "BTech", location: "Pune", students: 450,
-                    events: [
-                        { id: 3501, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Jan 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                        { id: 3502, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Jan 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                        { id: 3503, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Jan 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                        { id: 3504, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Jan 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                        { id: 3505, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Jan 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 3506, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Jan 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                     ]
-                },
-                {
-                    name: "Modern College Pune", field: "BTech", location: "Pune", students: 400,
-                    events: [
-                        { id: 3601, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 3602, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Feb 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                     ]
-                },
-                {
-                    name: "Institute of Engineering Pune", field: "BTech", location: "Pune", students: 350,
-                     events: [
-                        { id: 3701, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Feb 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                        { id: 3702, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Feb 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                     ]
-                },
-                {
-                    name: "KJ Somaiya College", field: "BTech", location: "Mumbai", students: 300,
-                    events: [
-                        { id: 3801, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 3802, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                     ]
-                },
-                {
-                    name: "KK Wagh College", field: "BTech", location: "Nashik", students: 250,
-                    events: [
-                        { id: 3901, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Mar 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                        { id: 3902, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                        { id: 3903, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Mar 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                        { id: 3904, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                        { id: 3905, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 3906, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Mar 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                     ]
-                },
-                {
-                    name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Hadapsar", students: 300,
-                    events: [
-                        { id: 4001, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 4002, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                    ]
-                },
-                {
-                    name: "Law College Mumbai", field: "Law", location: "Mumbai", students: 500,
-                    events: [
-                        { id: 4101, title: "Moot Court", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 10", cat: "Academic", icon: "fa-gavel", desc: "International legal simulation." },
-                        { id: 4102, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 12", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
-                        { id: 4103, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Oct 14", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
-                     ]
-                },
-                { 
-                    name: "SLS Pune", field: "Law", location: "Pune", students: 350,
-                    events: [
-                        { id: 4201, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
-                        { id: 4202, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
-                     ]
-                },
-                { 
-                    name: "Agriculture University", field: "Agriculture", location: "Nagpur", students: 400,
-                    events: [
-                        { id: 4301, title: "AgriTech Expo", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 20", cat: "Agriculture", icon: "fa-seedling", desc: "Showcasing innovations in agriculture and sustainability." },
-                        { id: 4302, title: "Farmers' Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Oct 22", cat: "Agriculture", icon: "fa-tractor", desc: "Problem-solving competition for agricultural challenges." }
-                     ]
-                },
-                {
-                    name: "ICT Mumbai", field: "BTech", location: "Mumbai", students: 450,
-                    events: [
-                        { id: 4401, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 4402, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                     ]
-                },
-                {
-                    name: "Aeronautical University", field: "Aeronautical", location: "Bangalore", students: 300,
-                    events: [
-                        { id: 4501, title: "AeroDesign Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Nov 25", cat: "Aeronautical", icon: "fa-plane-departure", desc: "Design and build model aircraft for various challenges." },
-                        { id: 4502, title: "Flight Simulation Contest", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Nov 27", cat: "Aeronautical", icon: "fa-sim-card", desc: "Virtual flight simulation competition testing piloting skills." }
-                     ]
-                },
-                { 
-                    name: "Avionics Institute", field: "Avionics", location: "Chennai", students: 250,
-                    events: [
-                        { id: 4601, title: "Drone Racing League", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 1", cat: "Avionics", icon: "fa-drone", desc: "High-speed drone racing through challenging courses." },
-                        { id: 4602, title: "Avionics Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 3", cat: "Technical", icon: "fa-code-branch", desc: "Hackathon focused on avionics software and hardware solutions." }
-                     ]
-                },
-                {
-                    name: "Space Research Institute", field: "Space Science", location: "Thiruvananthapuram", students: 200,
-                    events: [
-                        { id: 4701, title: "Rocketry Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Dec 5", cat: "Space Science", icon: "fa-rocket", desc: "Design and launch model rockets for distance and accuracy." },
-                        { id: 4702, title: "AstroHackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 7", cat: "Technical", icon: "fa-code-branch", desc: "Hackathon focused on space science data analysis and software solutions." }
-                     ]  
-                },
-                {
-                    name: "Marine University", field: "Marine Engineering", location: "Kochi", students: 150,
-                    events: [
-                        { id: 4801, title: "Marine Robotics Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 10", cat: "Marine Engineering", icon: "fa-anchor", desc: "Design and operate underwater robots for various tasks." },
-                        { id: 4802, title: "Oceanography Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-water", desc: "Hackathon focused on oceanographic data analysis and solutions." }
-                     ]
-                },
-                {
-                    name: "Renewable Energy Institute", field: "Energy", location: "Ahmedabad", students: 100,
-                    events: [
-                        { id: 4901, title: "Solar Car Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Dec 15", cat: "Energy", icon: "fa-solar-panel", desc: "Design and race solar-powered vehicles." },
-                        { id: 4902, title: "Wind Energy Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 17", cat: "Technical", icon: "fa-wind", desc: "Hackathon focused on wind energy data analysis and solutions." }
-                     ]
-                },
-                {
-                    name: "JSPM College Pune", field: "BTech", location: "Pune", students: 400,
-                    events: [
-                        { id: 5001, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 5002, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Mar 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                     ]
-                },
-                {
-                    name: "Pune University", field: "BTech", location: "Pune", students: 500,
-                    events: [
-                        { id: 5101, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                        { id: 5102, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Mar 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                     ]
-                },
-                {
-                    name: "NMIET Pune", field: "BTech", location: "Pune", students: 350,
-                    events: [
-                        { id: 5201, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 5202, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                     ]
-                },
-                {
-                    name: "MIT Pune", field: "BTech", location: "Pune", students: 450,
-                    events: [
-                        { id: 5301, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Apr 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                        { id: 5302, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Apr 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                        { id: 5303, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Apr 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                        { id: 5304, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Apr 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                        { id: 5305, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Apr 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 5306, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Apr 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                     ]
-                },
-                {
-                    name: "Zeal College Pune", field: "BTech", location: "Pune", students: 300,
-                    events: [
-                        { id: 5401, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Apr 25", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
-                        { id: 5402, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Apr 27", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
-                     ]
-                },
-                {
-                    name:"PCCOE Pune", field: "BTech", location: "Pune", students: 400,
-                    events: [
-                        { id: 5501, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "May 1", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
-                        { id: 5502, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "May 3", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
-                     ]  
-                },
-                {
-                    name: "VIT Kondhwa Pune", field: "BTech", location: "Pune", students: 350,
-                    events: [   
-                        { id: 5601, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "May 5", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
-                        { id: 5602, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "May 7", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
-                     ]
-                },
-                {
-                    name: "PICT Pune", field: "BTech", location: "Pune", students: 300,
-                    events: [
-                        { id: 5701, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "May 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
-                        { id: 5702, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "May 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
-                        { id: 5703, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "May 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
-                        { id: 5704, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "May 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
-                        { id: 5705, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "May 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
-                        { id: 5706, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "May 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
-                     ]
-                }
-            ];
+        // const allColleges = [
+        //     { 
+        //         name: "IIT Bombay", field: "BTech", location: "Mumbai", students: 2100, 
+        //         events: [
+        //             { id: 101, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Jan 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //             { id: 102, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Jan 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //             { id: 103, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Jan 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //         ] 
+        //     },
+        //     { 
+        //         name: "MIT Pune", field: "BTech", location: "Pune", students: 450, 
+        //         events: [
+        //             { id: 201, title: "CodeCraft", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 15", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //             { id: 202, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Nov 16", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //         ] 
+        //     },
+        //     { 
+        //         name: "AIIMS Delhi", field: "MBBS", location: "Delhi", students: 600, 
+        //         events: [
+        //             { id: 501, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Sept 10", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
+        //         ] 
+        //     },
+        //     {
+        //         name:"PCCOER", field:"BTech", location:"Pune", students: 350,
+        //         events: [
+        //             { id: 601, title: "RoboWars", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf9j7biTnGmqQRMo5Z6GNgxYO_WQ0HTHHANQ&s", fee: "₹250", criteria: "All", date: "Oct 20", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //             { id: 602, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 22", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //             { id: 603, title: " Kurukshetra", img: "https://internshala-competitions.s3.ap-south-1.amazonaws.com/competitions/wp-content/uploads/2026/04/06115817/Kurukshetra-2026-1024x683.png", fee: "₹150", criteria: "Gamers", date: "Oct 25", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //             { id: 604, title: "Electrothon", img: "https://electrothon-5.devfolio.co/_next/image?url=https%3A%2F%2Fassets.devfolio.co%2Fhackathons%2F2e7cc51465be427f8fc881020d01ebf1%2Fassets%2Fcover%2F566.png&w=1440&q=100", fee: "₹200", criteria: "All", date: "Oct 28", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //             { id: 605, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Oct 30", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //             { id: 606, title: "Quantibid", img: "https://d8it4huxumps7.cloudfront.net/uploads/images/opportunity/mobile_banner/69cff3a17df82_quantbid-arena.png", fee: "₹150", criteria: "All", date: "Nov 1", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //         ]
+        //     },
+        //     { 
+        //         name: "VIT Pune", field: "BTech", location: "Pune", students: 500, 
+        //         events: [
+        //             { id: 701, title: "InnovateX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Nov 10", cat: "Innovation", icon: "fa-lightbulb", desc: "Showcase your innovative projects and ideas." },
+        //             { id: 702, title: "Crescendo", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 12", cat: "Technical", icon: "fa-code", desc: "24-hour hackathon with exciting problem statements." }
+        //         ] 
+        //     },
+        //     {
+        //         name: "Symbiosis Law School", field: "Law", location: "Pune", students: 400, 
+        //         events: [
+        //             { id: 801, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
+        //             { id: 802, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
+        //         ]
+        //     },
+        //     {
+        //         name: "PICT Pune", field: "BTech", location: "Pune", students: 300,
+        //         events: [
+        //             { id: 901, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //             { id: 902, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //         ]
+        //     },
+        //     {
+        //         name: "Cummins College", field: "BTech", location: "Pune", students: 250,
+        //         events: [
+        //             { id: 1001, title: "MechX", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "Mechanical", date: "Dec 1", cat: "Mechanical", icon: "fa-cogs", desc: "Challenges in mechanical design and robotics." },
+        //             { id: 1002, title: "AutoDrive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "Automobile", date: "Dec 3", cat: "Automobile", icon: "fa-car-side", desc: "Design and race autonomous vehicles." },
+        //             { id: 1003, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 5", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //             { id: 1004, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Dec 7", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //      ]
+        //     },
+        //     {
+        //         name: "MIT World Peace University", field: "BTech", location: "Pune", students: 400,
+        //         events: [
+        //             { id: 1101, title: "PeaceTech", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 10", cat: "Innovation", icon: "fa-dove", desc: "Innovative solutions for global peace and sustainability." },
+        //             { id: 1102, title: "Code for Earth", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-globe-americas", desc: "Hackathon focused on environmental challenges." }
+        //         ]
+        //     },
+        //     {
+        //         name: "SIT Pune", field: "BTech", location: "Pune", students: 350,
+        //         events: [
+        //             { id: 1201, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //             { id: 1202, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Dec 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //         ]
+        //     },
+        //     {
+        //         name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Pimpri", students: 300,
+        //         events: [
+        //             { id: 1301, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //             { id: 1302, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //         ]
+        //     },
+        //     {
+        //             name: "College of Engineering Pune", field: "BTech", location: "Pune", students: 550,
+        //             events: [
+        //                 { id: 1501, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 1502, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Feb 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //             ]
+        //         },
+        //         {
+        //             name: "Army Institute of Technology", field: "BTech", location: "Pune", students: 400,
+        //             events: [
+        //                 { id: 1601, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Feb 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //                 { id: 1602, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Feb 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //             ]
+        //         },
+        //         {
+        //             name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Akurdi", students: 300,
+        //             events: [
+        //                 { id: 1701, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 1702, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //             ]
+        //         },
+        //         {
+        //             name: "Sinhgad College of Engineering", field: "BTech", location: "Pune", students: 450,
+        //                 events: [
+        //                 { id: 1801, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Mar 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //                 { id: 1802, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //                 { id: 1803, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Mar 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //                 { id: 1804, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //                 { id: 1805, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 1806, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Mar 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //             ]
+        //         },
+        //         { 
+        //             name: "AIMS Nagpur", field: "MBBS", location: "Nagpur", students: 500,
+        //             events: [
+        //                 { id: 1901, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Mar 25", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
+        //              ]
+        //         },
+        //         {
+        //             name: "IIT Delhi", field: "BTech", location: "Delhi", students: 2000, 
+        //             events: [
+        //                 { id: 2001, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Apr 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2002, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Apr 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2003, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Apr 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         { 
+        //             name: "IIT Madras", field: "BTech", location: "Chennai", students: 1800, 
+        //             events: [
+        //                 { id: 2101, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "May 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2102, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "May 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2103, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "May 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         {
+        //             name: "IIT Kanpur", field: "BTech", location: "Kanpur", students: 1600, 
+        //             events: [
+        //                 { id: 2201, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "June 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2202, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "June 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2203, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "June 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         {
+        //             name: "IIT Roorkee", field: "BTech", location: "Roorkee", students: 1400, 
+        //             events: [
+        //                 { id: 2301, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "July 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2302, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "July 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2303, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "July 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         { 
+        //             name: "IIT Guwahati", field: "BTech", location: "Guwahati", students: 1200, 
+        //             events: [
+        //                 { id: 2401, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Aug 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2402, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Aug 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2403, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Aug 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         {
+        //             name: "IIT Hyderabad", field: "BTech", location: "Hyderabad", students: 1000, 
+        //             events: [
+        //                 { id: 2501, title: "Techfest 24", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800", fee: "₹500", criteria: "Undergrads", date: "Sept 10", cat: "Technical", icon: "fa-microchip", desc: "India's largest science and technology festival." },
+        //                 { id: 2502, title: "Math X", img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800", fee: "₹100", criteria: "All Fields", date: "Sept 12", cat: "Logic", icon: "fa-calculator", desc: "A high-intensity calculus and logic challenge." },
+        //                 { id: 2503, title: "Canvas Craft", img: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=800", fee: "Free", criteria: "Art Lovers", date: "Sept 14", cat: "Art", icon: "fa-palette", desc: "Live painting and poster-making competition." }
+        //             ]
+        //         },
+        //         {
+        //             name: "AIMS Delhi", field: "MBBS", location: "Delhi", students: 600, 
+        //             events: [
+        //                 { id: 2601, title: "Pulse 24", img: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?q=80&w=800", fee: "₹300", criteria: "Med Students", date: "Sept 10", cat: "Medical", icon: "fa-stethoscope", desc: "The biggest medical student fest." }
+        //          ]
+        //         },
+        //         {
+        //             name: "FC Law college", field: "Law", location: "Pune", students: 600,
+        //             events: [
+        //                 { id: 2701, title: "Moot Court", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 10", cat: "Academic", icon: "fa-gavel", desc: "International legal simulation." },
+        //                 { id: 2702, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 12", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
+        //                 { id: 2703, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Oct 14", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
+        //             ]
+        //         },
+        //         {
+        //             name: "Symbiosis Law School", field: "Law", location: "Pune", students: 400, 
+        //             events: [
+        //                 { id: 2801, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
+        //                 { id: 2802, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
+        //             ]
+        //         },
+        //         {
+        //             name: "NFSU Gandhinagar", field: "Agriculture", location: "Gandhinagar", students: 350,
+        //             events: [
+        //                 { id: 2901, title: "AgriTech Expo", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 20", cat: "Agriculture", icon: "fa-seedling", desc: "Showcasing innovations in agriculture and sustainability." },
+        //                 { id: 2902, title: "Farmers' Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Oct 22", cat: "Agriculture", icon: "fa-tractor", desc: "Problem-solving competition for agricultural challenges." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Bharti Vidyapeeth College", field: "BTech", location: "Pune", students: 450,
+        //             events: [
+        //                 { id: 3001, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 3002, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //              ]
+        //         },
+        //         { 
+        //             name: "Walchand College", field: "BTech", location: "Sangli", students: 300,
+        //             events: [ 
+        //                 { id: 3101, title: "MechX", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "Mechanical", date: "Dec 1", cat: "Mechanical", icon: "fa-cogs", desc: "Challenges in mechanical design and robotics." },
+        //                 { id: 3102, title: "AutoDrive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "Automobile", date: "Dec 3", cat: "Automobile", icon: "fa-car-side", desc: "Design and engineering competition for automobile enthusiasts." },
+        //                 { id: 3103, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 5", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 3104, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Dec 7", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //           ]
+        //         },
+        //         {
+        //             name: " DJSCE Mumbai", field: "BTech", location: "Mumbai", students: 400,
+        //             events: [
+        //                 { id: 3201, title: "PeaceTech", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 10", cat: "Innovation", icon: "fa-dove", desc: "Innovative solutions for global peace and sustainability." },
+        //                 { id: 3202, title: "Code for Earth", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-globe-americas", desc: "Hackathon focused on environmental challenges." }
+        //              ]
+        //         },
+        //         {
+        //             name: " MMCC Pune", field: "BTech", location: "Pune", students: 350,
+        //             events: [
+        //                 { id: 3301, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //                 { id: 3302, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Dec 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "HVPM Pune", field: "BTech", location: "Pune", students: 300,
+        //             events: [
+        //                 { id: 3401, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Dec 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 3402, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Dec 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //              ]
+        //         },
+        //         { 
+        //             name: "PVG Pune", field: "BTech", location: "Pune", students: 450,
+        //             events: [
+        //                 { id: 3501, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Jan 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //                 { id: 3502, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Jan 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //                 { id: 3503, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Jan 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //                 { id: 3504, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Jan 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //                 { id: 3505, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Jan 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 3506, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Jan 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Modern College Pune", field: "BTech", location: "Pune", students: 400,
+        //             events: [
+        //                 { id: 3601, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 3602, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Feb 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Institute of Engineering Pune", field: "BTech", location: "Pune", students: 350,
+        //              events: [
+        //                 { id: 3701, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Feb 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //                 { id: 3702, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Feb 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "KJ Somaiya College", field: "BTech", location: "Mumbai", students: 300,
+        //             events: [
+        //                 { id: 3801, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 3802, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "KK Wagh College", field: "BTech", location: "Nashik", students: 250,
+        //             events: [
+        //                 { id: 3901, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Mar 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //                 { id: 3902, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //                 { id: 3903, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Mar 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //                 { id: 3904, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //                 { id: 3905, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 3906, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Mar 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Dr. D.Y. Patil Institute", field: "BTech", location: "Hadapsar", students: 300,
+        //             events: [
+        //                 { id: 4001, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Feb 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 4002, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Feb 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //             ]
+        //         },
+        //         {
+        //             name: "Law College Mumbai", field: "Law", location: "Mumbai", students: 500,
+        //             events: [
+        //                 { id: 4101, title: "Moot Court", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 10", cat: "Academic", icon: "fa-gavel", desc: "International legal simulation." },
+        //                 { id: 4102, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Oct 12", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
+        //                 { id: 4103, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Oct 14", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
+        //              ]
+        //         },
+        //         { 
+        //             name: "SLS Pune", field: "Law", location: "Pune", students: 350,
+        //             events: [
+        //                 { id: 4201, title: "Legalese", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "Free", criteria: "Law Students", date: "Dec 5", cat: "Academic", icon: "fa-gavel", desc: "National level legal quiz competition." },
+        //                 { id: 4202, title: "CaseCraft", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=800", fee: "₹100", criteria: "Law Students", date: "Dec 7", cat: "Academic", icon: "fa-gavel", desc: "Mock trial competition with real-world cases." }
+        //              ]
+        //         },
+        //         { 
+        //             name: "Agriculture University", field: "Agriculture", location: "Nagpur", students: 400,
+        //             events: [
+        //                 { id: 4301, title: "AgriTech Expo", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Oct 20", cat: "Agriculture", icon: "fa-seedling", desc: "Showcasing innovations in agriculture and sustainability." },
+        //                 { id: 4302, title: "Farmers' Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Oct 22", cat: "Agriculture", icon: "fa-tractor", desc: "Problem-solving competition for agricultural challenges." }
+        //              ]
+        //         },
+        //         {
+        //             name: "ICT Mumbai", field: "BTech", location: "Mumbai", students: 450,
+        //             events: [
+        //                 { id: 4401, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Nov 20", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 4402, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Nov 22", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Aeronautical University", field: "Aeronautical", location: "Bangalore", students: 300,
+        //             events: [
+        //                 { id: 4501, title: "AeroDesign Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Nov 25", cat: "Aeronautical", icon: "fa-plane-departure", desc: "Design and build model aircraft for various challenges." },
+        //                 { id: 4502, title: "Flight Simulation Contest", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "All", date: "Nov 27", cat: "Aeronautical", icon: "fa-sim-card", desc: "Virtual flight simulation competition testing piloting skills." }
+        //              ]
+        //         },
+        //         { 
+        //             name: "Avionics Institute", field: "Avionics", location: "Chennai", students: 250,
+        //             events: [
+        //                 { id: 4601, title: "Drone Racing League", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 1", cat: "Avionics", icon: "fa-drone", desc: "High-speed drone racing through challenging courses." },
+        //                 { id: 4602, title: "Avionics Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 3", cat: "Technical", icon: "fa-code-branch", desc: "Hackathon focused on avionics software and hardware solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Space Research Institute", field: "Space Science", location: "Thiruvananthapuram", students: 200,
+        //             events: [
+        //                 { id: 4701, title: "Rocketry Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Dec 5", cat: "Space Science", icon: "fa-rocket", desc: "Design and launch model rockets for distance and accuracy." },
+        //                 { id: 4702, title: "AstroHackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 7", cat: "Technical", icon: "fa-code-branch", desc: "Hackathon focused on space science data analysis and software solutions." }
+        //              ]  
+        //         },
+        //         {
+        //             name: "Marine University", field: "Marine Engineering", location: "Kochi", students: 150,
+        //             events: [
+        //                 { id: 4801, title: "Marine Robotics Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹200", criteria: "All", date: "Dec 10", cat: "Marine Engineering", icon: "fa-anchor", desc: "Design and operate underwater robots for various tasks." },
+        //                 { id: 4802, title: "Oceanography Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 12", cat: "Technical", icon: "fa-water", desc: "Hackathon focused on oceanographic data analysis and solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Renewable Energy Institute", field: "Energy", location: "Ahmedabad", students: 100,
+        //             events: [
+        //                 { id: 4901, title: "Solar Car Challenge", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹250", criteria: "All", date: "Dec 15", cat: "Energy", icon: "fa-solar-panel", desc: "Design and race solar-powered vehicles." },
+        //                 { id: 4902, title: "Wind Energy Hackathon", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹150", criteria: "Coders", date: "Dec 17", cat: "Technical", icon: "fa-wind", desc: "Hackathon focused on wind energy data analysis and solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "JSPM College Pune", field: "BTech", location: "Pune", students: 400,
+        //             events: [
+        //                 { id: 5001, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 10", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 5002, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Mar 12", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Pune University", field: "BTech", location: "Pune", students: 500,
+        //             events: [
+        //                 { id: 5101, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "Mar 15", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //                 { id: 5102, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "Mar 17", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "NMIET Pune", field: "BTech", location: "Pune", students: 350,
+        //             events: [
+        //                 { id: 5201, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Mar 20", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 5202, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Mar 22", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "MIT Pune", field: "BTech", location: "Pune", students: 450,
+        //             events: [
+        //                 { id: 5301, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "Apr 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //                 { id: 5302, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "Apr 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //                 { id: 5303, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "Apr 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //                 { id: 5304, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "Apr 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //                 { id: 5305, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Apr 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 5306, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "Apr 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //              ]
+        //         },
+        //         {
+        //             name: "Zeal College Pune", field: "BTech", location: "Pune", students: 300,
+        //             events: [
+        //                 { id: 5401, title: "CodeStorm", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "Apr 25", cat: "Technical", icon: "fa-code", desc: "Intense coding battles and algorithm challenges." },
+        //                 { id: 5402, title: "DesignX", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Designers", date: "Apr 27", cat: "Design", icon: "fa-palette", desc: "UI/UX and graphic design competitions." }
+        //              ]
+        //         },
+        //         {
+        //             name:"PCCOE Pune", field: "BTech", location: "Pune", students: 400,
+        //             events: [
+        //                 { id: 5501, title: "CyberSec Challenge", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "All", date: "May 1", cat: "Cybersecurity", icon: "fa-shield-alt", desc: "Capture the flag and cybersecurity puzzles." },
+        //                 { id: 5502, title: "DataDive", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹150", criteria: "Data Enthusiasts", date: "May 3", cat: "Data Science", icon: "fa-database", desc: "Data analysis and machine learning competitions." }
+        //              ]  
+        //         },
+        //         {
+        //             name: "VIT Kondhwa Pune", field: "BTech", location: "Pune", students: 350,
+        //             events: [   
+        //                 { id: 5601, title: "BioTech Symposium", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "May 5", cat: "Biotechnology", icon: "fa-dna", desc: "Exploring advancements in biotechnology and healthcare." },
+        //                 { id: 5602, title: "Code for Health", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "May 7", cat: "Technical", icon: "fa-heartbeat", desc: "Hackathon focused on healthcare solutions." }
+        //              ]
+        //         },
+        //         {
+        //             name: "PICT Pune", field: "BTech", location: "Pune", students: 300,
+        //             events: [
+        //                 { id: 5701, title: "RoboWars", img: "https://images.unsplash.com/photo-1581093588401-ecfd9c736f8a?q=80&w=800", fee: "₹250", criteria: "All", date: "May 10", cat: "Technical", icon: "fa-robot", desc: "Battle of custom-built robots." },
+        //                 { id: 5702, title: "Technovate", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=800", fee: "₹100", criteria: "All", date: "May 12", cat: "Automobile", icon: "fa-car-side", desc: "Various coding competitions like hackathons, debugging, code heist, prompt battle, UI_UX." },
+        //                 { id: 5703, title: " Kurukshetra", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800", fee: "₹150", criteria: "Gamers", date: "May 15", cat: "Gaming", icon: "fa-gamepad", desc: "Competitive gaming tournament with popular titles." },
+        //                 { id: 5704, title: "Electrothon", img: "https://images.unsplash.com/photo-1581091012184-9cde0eaa1b8a?q=80&w=800", fee: "₹200", criteria: "All", date: "May 18", cat: "Electrical", icon: "fa-bolt", desc: "Challenges in circuit design and electrical engineering." },
+        //                 { id: 5705, title: "Code-O-Fiesta", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800", fee: "₹200", criteria: "Coders", date: "May 20", cat: "Technical", icon: "fa-code", desc: "Data structures and algorithm sprinting." },
+        //                 { id: 5706, title: "Quantibid", img: "https://images.unsplash.com/photo-1611974714024-4607a50d4f2a?q=80&w=800", fee: "₹150", criteria: "All", date: "May 22", cat: "Finance", icon: "fa-chart-line", desc: "Virtual stock market and bidding war." }
+        //              ]
+        //         }
+        //     ];
+const API = "http://127.0.0.1:8000";
+let globalColleges = []; // Stores the active colleges
+let allEcosystemEvents = []; // Stores events from Forge
 
-        let displayLimit = 12;
-        let filteredColleges = [];
+async function initHub() {
+    try {
+        // 1. Sync User Header
+        const name = localStorage.getItem('sv_user_name') || "Student";
+        document.getElementById('displayUserName').innerText = name;
+        document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+        document.getElementById('userInitial').innerText = name[0].toUpperCase();
 
-        function init() {
-            const name = localStorage.getItem('sv_user_name') || "Student";
-            document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
-            document.getElementById('displayUserName').innerText = name;
-            document.getElementById('userInitial').innerText = name[0].toUpperCase();
-            filteredColleges = [...allColleges];
-            render();
-        }
+        // 2. Fetch Active Colleges from Users in DB
+        const colRes = await fetch(`${API}/api/colleges/active`);
+        globalColleges = await colRes.json();
+        
+        // Update the Campus Counter (Image fix)
+        document.getElementById('countDisplay').innerText = globalColleges.length;
 
-        function render() {
-            const grid = document.getElementById('collegeGrid');
-            const dataToShow = filteredColleges.slice(0, displayLimit);
-            grid.innerHTML = dataToShow.map(c => `
-                <div class="glass-card p-6 cursor-pointer group" onclick="openCollege('${c.name}')">
-                    <div class="flex justify-between items-start mb-10">
-                        <div class="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center text-indigo-400 text-3xl font-black border border-white/10 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xl">${c.name[0]}</div>
-                        <span class="text-[10px] font-black bg-indigo-500/10 border border-indigo-500/20 px-4 py-1.5 rounded-full text-indigo-300 uppercase">${c.field}</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-1 tracking-tight">${c.name}</h3>
-                    <p class="text-xs text-slate-500 mb-6 flex items-center gap-2 font-bold"><i class="fa-solid fa-location-dot text-indigo-500"></i> ${c.location}</p>
-                    <div class="flex items-center justify-between pt-6 border-t border-white/5">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${c.students} Members</span>
-                        <span class="text-emerald-400 font-black text-[10px] uppercase tracking-widest">${c.events.length} Live Events</span>
-                    </div>
+        // 3. Fetch all Forge Events to show them inside college modals later
+        const eventRes = await fetch(`${API}/api/forge/list?category=event`);
+        allEcosystemEvents = await eventRes.json();
+
+        renderColleges();
+    } catch (e) {
+        console.error("Hub Sync Error:", e);
+        document.getElementById('collegeGrid').innerHTML = "<p class='text-red-500'>Backend Unreachable. Is main.py running?</p>";
+    }
+}
+
+function renderColleges() {
+    const grid = document.getElementById('collegeGrid');
+    if (globalColleges.length === 0) {
+        grid.innerHTML = "<div class='col-span-3 py-20 opacity-40 text-center uppercase font-black text-xs tracking-widest'>No integrated campuses found in DB</div>";
+        return;
+    }
+
+    grid.innerHTML = globalColleges.map(c => `
+        <div class="glass-card p-8 border border-white/5 relative overflow-hidden group">
+            <div class="w-16 h-16 bg-indigo-600/20 rounded-3xl flex items-center justify-center text-3xl font-black text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                ${c.name[0]}
+            </div>
+            <h3 class="text-2xl font-black mb-2">${c.name}</h3>
+            <p class="text-xs text-slate-500 mb-6 uppercase font-bold tracking-tighter">Verified Integrated Campus</p>
+            
+            <div class="flex items-center gap-4 mb-8 bg-white/5 p-3 rounded-xl">
+                <div class="text-center">
+                    <p class="text-[8px] font-black text-slate-500 uppercase">Members</p>
+                    <p class="text-lg font-bold">${c.students}</p>
                 </div>
-            `).join('');
-            document.getElementById('countDisplay').innerText = filteredColleges.length;
-            document.getElementById('viewMoreContainer').classList.toggle('hidden', displayLimit >= filteredColleges.length);
-        }
+            </div>
 
-        function handleSearch() {
-            const q = document.getElementById('collegeSearch').value.toLowerCase();
-            filteredColleges = allColleges.filter(c => c.name.toLowerCase().includes(q) || c.field.toLowerCase().includes(q));
-            displayLimit = 12; render();
-        }
+            <!-- FIX: Added valid onclick and pointer cursor -->
+            <button onclick="openCollegeDetails('${c.name}')" 
+                    class="bg-indigo-600 hover:bg-indigo-500 w-full py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest transition shadow-lg">
+                Know More...
+            </button>
+        </div>
+    `).join('');
+}
 
-        function showMore() { displayLimit += 12; render(); }
+// FIX: New function to handle "Know More" click
+async function openCollegeDetails(collegeName) {
+    const modal = document.getElementById('collegeModal');
+    const content = document.getElementById('modalContent');
+    
+    // Filter events from the Forge that belong to this specific college
+    const collegeEvents = allEcosystemEvents.filter(ev => ev.organizer.toLowerCase() === collegeName.toLowerCase());
 
-        function openCollege(name) {
-            const c = allColleges.find(col => col.name === name);
-            const content = document.getElementById('modalContent');
-            content.innerHTML = `
-                <div class="mb-10">
-                    <h2 class="text-4xl font-black mb-1">${c.name}</h2>
-                    <p class="text-indigo-400 font-bold text-xs uppercase tracking-[0.3em]">${c.location} • Verified Institution</p>
+    content.innerHTML = `
+        <div class="mb-10">
+            <h2 class="text-5xl font-black tracking-tighter">${collegeName}</h2>
+            <p class="text-indigo-400 font-black uppercase text-xs mt-2">Active Live Cluster</p>
+        </div>
+        
+        <h4 class="text-xs font-black uppercase text-slate-500 mb-6 tracking-widest">Available Live Events</h4>
+        
+        <div class="space-y-4">
+            ${collegeEvents.length > 0 ? collegeEvents.map(ev => `
+                <div class="glass-card p-6 border border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <h4 class="text-xl font-bold">${ev.title}</h4>
+                        <p class="text-[10px] text-indigo-400 font-black uppercase mt-1">FORGE ID: ${ev.id.substring(0,8)}</p>
+                    </div>
+                    <button onclick="openEventDetail('${ev.id}')" class="bg-indigo-600 px-8 py-3 rounded-xl font-black uppercase text-[10px]">Details & Register</button>
                 </div>
-                <div class="space-y-4">
-                    ${c.events.map(ev => `
-                        <div class="glass-card p-6 flex flex-col md:flex-row justify-between items-center gap-6 border border-white/5 group">
-                            <div class="flex items-center gap-6">
-                                <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-indigo-400 text-2xl">
-                                    <i class="fa-solid ${ev.icon}"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-xl font-bold group-hover:text-indigo-400 transition">${ev.title}</h4>
-                                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest mt-1">${ev.cat} • ${ev.date}</p>
-                                </div>
-                            </div>
-                            <button onclick="openEventDetail('${c.name}', ${ev.id})" class="bg-indigo-600 hover:bg-indigo-500 px-10 py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl transition">Register</button>
-                        </div>
-                    `).join('')}
+            `).join('') : `<p class='opacity-30 italic text-sm'>No live events currently hosted by this campus in the Forge.</p>`}
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+}
+
+// Function to show the final Registration form for an event
+function openEventDetail(eventId) {
+    const ev = allEcosystemEvents.find(e => e.id === eventId);
+    const detailModal = document.getElementById('eventDetailModal');
+    const detailContent = document.getElementById('eventDetailContent');
+
+    detailContent.innerHTML = `
+        <div class="p-10">
+            <h2 class="text-4xl font-black tracking-tighter mb-4">${ev.title}</h2>
+            <div class="bg-white/5 p-6 rounded-2xl border border-white/5 mb-8">
+                <p class="text-sm text-slate-300 leading-relaxed italic">"${ev.desc}"</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-8 text-center">
+                <div class="bg-indigo-600/10 p-4 rounded-xl border border-indigo-500/20">
+                    <p class="text-[8px] font-black uppercase text-slate-500">Authority</p>
+                    <p class="text-xs font-bold">${ev.organizer}</p>
                 </div>
-            `;
-            document.getElementById('collegeModal').classList.remove('hidden');
-        }
-
-        function openEventDetail(collegeName, eventId) {
-            const college = allColleges.find(c => c.name === collegeName);
-            const ev = college.events.find(e => e.id === eventId);
-            const content = document.getElementById('eventDetailContent');
-            content.innerHTML = `
-                <img src="${ev.img}" class="hero-img">
-                <div class="p-10">
-                    <div class="flex justify-between items-start mb-8">
-                        <div>
-                            <h2 class="text-4xl font-black tracking-tight mb-1">${ev.title}</h2>
-                            <p class="text-indigo-400 font-bold uppercase text-[10px] tracking-widest flex items-center gap-2">
-                                <i class="fa-solid ${ev.icon}"></i> ${collegeName}
-                            </p>
-                        </div>
-                        <span class="bg-emerald-500/10 text-emerald-400 px-4 py-1 rounded-full text-[10px] font-black uppercase">Active</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-6 mb-8">
-                        <div class="bg-white/5 p-5 rounded-3xl border border-white/5">
-                            <p class="text-[10px] uppercase font-black text-slate-500 mb-1">Entry Fee</p>
-                            <p class="text-2xl font-bold text-emerald-400">${ev.fee}</p>
-                        </div>
-                        <div class="bg-white/5 p-5 rounded-3xl border border-white/5">
-                            <p class="text-[10px] uppercase font-black text-slate-500 mb-1">Eligibility</p>
-                            <p class="text-sm font-bold text-slate-300">${ev.criteria}</p>
-                        </div>
-                    </div>
-                    <div class="bg-white/5 p-6 rounded-2xl border border-white/5">
-                        <p class="text-slate-400 text-sm leading-relaxed">${ev.desc}</p>
-                    </div>
-                    <div class="flex gap-4 mt-8">
-                        <button onclick="closeModal('eventDetailModal')" class="flex-1 bg-white/5 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-white/10 hover:bg-white/10 transition">Back</button>
-                        <button onclick="openFinalReg('${ev.title}')" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl transition">Fill Application</button>
-                    </div>
+                <div class="bg-emerald-600/10 p-4 rounded-xl border border-emerald-500/20">
+                    <p class="text-[8px] font-black uppercase text-slate-500">Access</p>
+                    <p class="text-xs font-bold text-emerald-400">Verified</p>
                 </div>
-            `;
-            document.getElementById('eventDetailModal').classList.remove('hidden');
-        }
+            </div>
+            <button onclick="openFinalReg('${ev.title}')" class="w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase text-xs">Apply Now</button>
+        </div>
+    `;
 
-        function openFinalReg(title) {
-            document.getElementById('regEventTitle').innerText = title;
-            document.getElementById('regFormModal').classList.remove('hidden');
-        }
+    document.getElementById('collegeModal').classList.add('hidden');
+    detailModal.classList.remove('hidden');
+}
 
-        function finishRegistration(e) {
-            e.preventDefault();
-            alert("Application Submitted! Welcome to the event.");
-            closeModal('regFormModal');
-            closeModal('eventDetailModal');
-            closeModal('collegeModal');
-        }
+function openFinalReg(title) {
+    document.getElementById('regEventTitle').innerText = title;
+    document.getElementById('regFormModal').classList.remove('hidden');
+}
 
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-        function toggleSidebar() { 
-            const sb = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sb.classList.toggle('-translate-x-full');
-            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
-        }
-        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+function finishRegistration(e) {
+    e.preventDefault();
+    alert("System confirmed! You are registered.");
+    closeModal('regFormModal');
+    closeModal('eventDetailModal');
+}
 
-        init();
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+
+// Run
+window.onload = initHub;
+
     </script>
 </body>
 </html>

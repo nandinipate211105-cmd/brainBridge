@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In | BrainBridge Ecosystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #6366f1;
             --accent: #a855f7;
-            --bg-dark: #0f172a;
+            --bg-dark: #02020a;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-dark);
-            background: radial-gradient(circle at center, #1e1b4b, #0f172a);
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -26,198 +27,223 @@
             color: white;
         }
 
-        /* 3D Glassmorphism Card */
-        .glass-container {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* --- 3D Animated Background --- */
+        .glow-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            filter: blur(100px);
+            opacity: 0.2;
+            z-index: 1;
+            border-radius: 50%;
+            animation: move 20s infinite alternate;
+        }
+        .glow-1 { top: -10%; left: -5%; background: var(--primary); }
+        .glow-2 { bottom: -10%; right: -5%; background: var(--accent); animation-delay: -5s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        /* --- Impact Glassmorphism --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             position: relative;
             z-index: 10;
         }
 
-        /* Impactful Input Styling */
-        .input-group input {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        input {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            transition: 0.3s;
         }
-
-        .input-group input:focus {
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
+        input:focus {
+            border-color: var(--primary) !important;
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
             outline: none;
-            transform: scale(1.01);
         }
 
-        /* 3D Glow Button */
         .btn-impact {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px -10px var(--primary);
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.4);
+            transition: 0.3s;
         }
-
         .btn-impact:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 30px -10px var(--primary);
+            transform: translateY(-2px);
             filter: brightness(1.1);
         }
 
-        /* Decorative Background Elements */
-        .glow-blob {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: var(--primary);
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: 1;
-            border-radius: 50%;
+        /* Modal Blur */
+        .modal-overlay {
+            backdrop-filter: blur(15px);
+            background: rgba(0,0,0,0.7);
         }
-
-        .glow-1 { top: -10%; left: -10%; }
-        .glow-2 { bottom: -10%; right: -10%; background: var(--accent); }
     </style>
 </head>
 <body>
 
-    <!-- Background Orbs -->
     <div class="glow-blob glow-1"></div>
     <div class="glow-blob glow-2"></div>
 
-    <!-- BACK TO DASHBOARD BUTTON -->
-    <a href="index.html" class="absolute top-10 left-10 flex items-center gap-3 text-slate-400 hover:text-white transition-all duration-300 group z-50 bg-white/5 px-5 py-2.5 rounded-full border border-white/10 hover:bg-white/10">
-        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-        <span class="font-semibold tracking-wide uppercase text-xs">Back to Dashboard</span>
-    </a>
-
-    <div class="glass-container w-full max-w-md p-12 mx-4">
-        <!-- Logo Area -->
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold tracking-tighter text-white">
+    <!-- MAIN LOGIN CARD -->
+    <div class="glass-card w-full max-w-md p-10 mx-4 opacity-0" id="loginCard">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold tracking-tighter mb-2" style="font-family: 'Clash Display';">
                 Student<span class="text-indigo-500">Verse</span>
             </h1>
-            <p class="text-slate-400 text-sm mt-3 font-medium tracking-wide">Enter the unified digital ecosystem.</p>
+            <p class="text-slate-400 text-sm">Enter the unified digital ecosystem.</p>
         </div>
 
-        <form id="loginForm" class="space-y-8">
-            <div class="input-group">
-                <label class="block text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 mb-3 ml-1">College Email</label>
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">College Email</label>
                 <div class="relative">
                     <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-600"></i>
                     <input type="email" id="email" required placeholder="name@university.edu" 
-                           class="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-medium">
+                           class="w-full pl-12 pr-4 py-4 rounded-2xl text-sm">
                 </div>
             </div>
 
-            <div class="input-group">
-                <label class="block text-[10px] uppercase font-black tracking-[0.2em] text-slate-500 mb-3 ml-1">Access Key</label>
+            <div>
+                <label class="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Access Key</label>
                 <div class="relative">
                     <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-600"></i>
                     <input type="password" id="password" required placeholder="••••••••" 
-                           class="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-medium">
+                           class="w-full pl-12 pr-4 py-4 rounded-2xl text-sm">
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button" onclick="toggleModal('forgotModal', true)" 
+                            class="text-[11px] font-bold text-indigo-400 hover:text-white transition">
+                        Forgot Password?
+                    </button>
                 </div>
             </div>
 
-            <button type="submit" class="w-full btn-impact py-4 rounded-2xl font-black uppercase text-xs tracking-widest text-white mt-4">
+            <button type="submit" class="w-full btn-impact py-4 rounded-2xl font-bold uppercase text-xs tracking-widest mt-2">
                 Secure Sign In
             </button>
         </form>
 
-        
-
-        <!-- Form Footer -->
-        <div class="mt-10 text-center space-y-6">
-            <p class="text-[10px] text-slate-500 leading-relaxed uppercase tracking-wider">
-                By continuing, you agree to our <br> 
-                <a href="#" class="text-slate-300 hover:text-white underline">Terms</a> and 
-                <a href="#" class="text-slate-300 hover:text-white underline">Privacy Policy</a>.
+        <div class="mt-8 pt-6 border-t border-white/5 text-center">
+            <p class="text-slate-400 text-sm">New to the verse? 
+                <a href="register.html" class="text-indigo-400 font-bold hover:underline">Register Now</a>
             </p>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgotModal" class="fixed inset-0 z-[100] modal-overlay hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full p-8 border-t-4 border-indigo-500">
+            <h2 class="text-2xl font-bold mb-2" style="font-family: 'Clash Display';">Recover Access</h2>
+            <p class="text-slate-400 text-xs mb-6">A verification code will be sent to your email.</p>
             
-            <div class="pt-6 border-t border-white/5">
-                <p class="text-slate-400 text-sm">New to the verse? 
-                    <a href="register.html" class="text-indigo-400 font-extrabold hover:text-indigo-300 transition ml-1 underline underline-offset-4">Register Now</a>
-                </p>
+            <!-- Step 1: Request OTP -->
+            <div id="forgotStep1">
+                <input type="email" id="resetEmail" placeholder="Your College Email" class="w-full p-4 rounded-2xl text-sm mb-4 outline-none">
+                <button onclick="requestOTP()" id="otpBtn" class="w-full bg-indigo-600 py-3 rounded-xl font-bold text-xs uppercase tracking-widest">Send Code</button>
             </div>
+
+            <!-- Step 2: Verify & Change -->
+            <div id="forgotStep2" class="hidden space-y-4">
+                <input type="text" id="inputOTP" placeholder="6-Digit OTP" class="w-full p-4 rounded-2xl text-sm outline-none">
+                <input type="password" id="newPass" placeholder="New Access Key" class="w-full p-4 rounded-2xl text-sm outline-none">
+                <button onclick="handleReset()" class="w-full bg-emerald-600 py-3 rounded-xl font-bold text-xs uppercase tracking-widest">Update Password</button>
+            </div>
+
+            <button onclick="toggleModal('forgotModal', false)" class="w-full mt-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cancel</button>
         </div>
     </div>
-    <!-- Forgot Password Modal -->
-    <div id="forgotModal" class="fixed inset-0 z-[200] backdrop-blur-3xl bg-black/80 hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full p-10 border-t-4 border-indigo-500">
-            <h2 class="text-3xl font-black mb-2">Recover Access</h2>
-            <p class="text-slate-400 text-xs mb-8">We will send a code to your registered email.</p>
-            <div id="step1"> 
-                <input type="email" id="resetEmail" placeholder="Enter Email" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-4 outline-none">
-                <button onclick="requestOTP()" class="w-full bg-indigo-600 py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Send OTP</button>
-            </div>
 
-            <div id="step2" class="hidden">
-                <input type="text" id="inputOTP" placeholder="6-Digit Code" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-4 outline-none">
-                <input type="password" id="newPass" placeholder="New Password" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 mb-4 outline-none">
-                <button onclick="confirmReset()" class="w-full bg-emerald-600 py-4 rounded-xl font-bold uppercase text-xs tracking-widest">Update Password</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <script>
+        // --- ANIMATIONS ---
+        window.onload = () => {
+            gsap.to("#loginCard", { opacity: 1, y: -20, duration: 1, ease: "power4.out" });
+        };
 
-<script>
-async function requestOTP() {
-    const email = document.getElementById('resetEmail').value;
-    const res = await fetch('http://localhost:8000/api/auth/forgot-password', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ email })
-    });
-    if(res.ok) {
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.remove('hidden');
-    } else { alert("User not found"); }
-}
-// Implement confirmReset() similarly to fetch /api/auth/reset-password
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            if(show) {
+                modal.classList.remove('hidden');
+                gsap.from(modal.querySelector('.glass-card'), { scale: 0.9, opacity: 0, duration: 0.3 });
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
 
+        // --- AUTH LOGIC ---
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
-            
-            const emailValue = document.getElementById('email').value;
-            const passwordValue = document.getElementById('password').value;
-
-            // Simple loading state feedback
             const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "Authenticating...";
-            btn.disabled = true;
-
+            btn.innerText = "Verifying...";
+            
             try {
                 const res = await fetch('http://127.0.0.1:8000/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        email: emailValue, 
-                        password: passwordValue 
+                        email: document.getElementById('email').value, 
+                        password: document.getElementById('password').value 
                     })
                 });
-
                 const data = await res.json();
-
                 if(res.ok) {
                     localStorage.setItem('sv_user_name', data.name);
                     localStorage.setItem('sv_user_id', data.user_id);
-                    localStorage.setItem('sv_user_field', data.field);
                     window.location.href = 'dashboard.html';
                 } else {
-                    alert('Access Denied: ' + (data.detail || "Invalid Credentials"));
-                    btn.innerText = originalText;
-                    btn.disabled = false;
+                    alert(data.detail || "Login Failed");
+                    btn.innerText = "Secure Sign In";
                 }
             } catch (err) {
-                alert('System Offline: Please ensure the Python backend is active.');
-                btn.innerText = originalText;
-                btn.disabled = false;
+                alert("System Offline: Check Python Terminal");
+                btn.innerText = "Secure Sign In";
             }
         };
+
+        // --- FORGOT PASSWORD LOGIC ---
+        async function requestOTP() {
+            const email = document.getElementById('resetEmail').value;
+            const btn = document.getElementById('otpBtn');
+            btn.innerText = "Sending...";
+            
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                if(res.ok) {
+                    document.getElementById('forgotStep1').classList.add('hidden');
+                    document.getElementById('forgotStep2').classList.remove('hidden');
+                } else { alert("Email not registered"); }
+            } catch (e) { alert("Backend Error"); }
+            btn.innerText = "Send Code";
+        }
+
+        async function handleReset() {
+            const payload = {
+                email: document.getElementById('resetEmail').value,
+                otp: document.getElementById('inputOTP').value,
+                new_password: document.getElementById('newPass').value
+            };
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if(res.ok) {
+                    alert("Password Updated! Please Sign In.");
+                    location.reload();
+                } else { alert("Invalid OTP or Expired"); }
+            } catch (e) { alert("Error updating password"); }
+        }
     </script>
 </body>
 </html>

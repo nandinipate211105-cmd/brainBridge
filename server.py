@@ -21,8 +21,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 db_client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = db_client.studentverse
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 # --- UTILS ---
 def send_email(receiver, subject, body):
     msg = MIMEText(body)

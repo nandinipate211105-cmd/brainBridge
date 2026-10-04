@@ -366,58 +366,131 @@
     </div>
 
     <script>
-        // NAVIGATION
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-        function toggleNotif() { document.getElementById('notifHub').classList.toggle('show'); }
+const API_URL = "http://127.0.0.1:8000";
+const userId = localStorage.getItem('sv_user_id');
 
-        // SLIDER
-        let cur = 0; const slides = document.querySelectorAll('.slide');
-        setInterval(() => { slides[cur].classList.remove('active'); cur = (cur + 1) % slides.length; slides[cur].classList.add('active'); }, 5000);
+// --- 1. CORE DATA SYNC ---
+async function refreshDashboard() {
+    try {
+        const stats = await (await fetch(`http://127.0.0.1:8000/api/stats`)).json();
+        document.querySelectorAll('.stat-num').forEach((el, i) => {
+            if(i==0) el.innerText = stats.users.toLocaleString();
+            if(i==1) el.innerText = stats.teams;
+            if(i==2) el.innerText = stats.events;
+        });
 
-        // MODAL
-        function openModal(title, college, date, time, fee, elig, venue, mode, link) {
-            document.getElementById('mTitle').innerText = title;
-            document.getElementById('mCollege').innerText = college + " • Ecosystem Verified";
-            document.getElementById('mDate').innerText = date;
-            document.getElementById('mTime').innerText = time;
-            document.getElementById('mFee').innerText = fee;
-            document.getElementById('mElig').innerText = elig;
-            document.getElementById('mVenue').innerText = venue;
-            document.getElementById('mMode').innerText = mode;
-            document.getElementById('mOfficial').href = link;
-            document.getElementById('regModal').classList.remove('hidden');
+        // NOTIFICATIONS
+        const notifs = await (await fetch(`http://127.0.0.1:8000/api/notifications`)).json();
+        document.querySelector('.notif-dropdown .max-h-[450px]').innerHTML = notifs.map(n => `
+            <div class="p-4 border-b border-white/5 bg-indigo-500/5 animate-pulse">
+                <p class="text-[11px] font-bold">${n.message}</p>
+                <small class="opacity-50 text-[8px] uppercase">GLOBAL • ${new Date(n.timestamp).toLocaleTimeString()}</small>
+            </div>
+        `).join('');
+
+        // REAL EVENTS INTO THE UPCOMING GRID
+        const realEvents = await (await fetch(`http://127.0.0.1:8000/api/forge/list?category=event`)).json();
+        const grid = document.getElementById('upcoming-grid');
+        if(realEvents.length > 0) {
+            grid.innerHTML = realEvents.map(e => `
+                <div class="glass-card p-4">
+                    <h4 class="text-lg font-bold">${e.title}</h4>
+                    <p class="text-[9px] text-indigo-400 uppercase font-bold">${e.organizer}</p>
+                    <p class="text-xs text-slate-500 mt-2 line-clamp-2">"${e.desc}"</p>
+                    <button class="w-full bg-indigo-600 py-3 mt-4 rounded-xl text-[10px] font-black uppercase">Register Now</button>
+                </div>
+            `).join('');
         }
-        function closeReg() { document.getElementById('regModal').classList.add('hidden'); }
+    } catch(e) { console.error("Refresh Error"); }
+}
+setInterval(refreshDashboard, 15000);
+window.onload = () => { refreshDashboard(); syncIdentity(); 
+};
 
-        // VIEW ALL DYNAMIC
-        function viewAll(id) {
-            document.querySelectorAll(`#${id} .hidden-item`).forEach(i => {
-                i.style.display = 'block';
-                i.classList.add('animate-in', 'fade-in', 'slide-in-from-bottom-4', 'duration-500');
-            });
-            event.target.style.display = 'none';
-        }
-                // CHATBOT
-        function toggleChat() { document.getElementById('chatWindow').classList.toggle('hidden'); }
-        function sendChat() {
-            const input = document.getElementById('chatInput');
-            if(!input.value) return;
-            const area = document.getElementById('chatArea');
-            area.innerHTML += `<div class="flex justify-end"><div class="bg-indigo-600 p-2 rounded-xl text-xs max-w-[80%]">${input.value}</div></div>`;
-            input.value = "";
-            area.scrollTop = area.scrollHeight;
-        }
+// Initial fire
+window.addEventListener('load', () => {
+    refreshDashboard();
+    // Pings every 15 seconds to check for new entries from other users
+    setInterval(refreshDashboard, 15000); 
+});
+// --- 2. NAVIGATION & UI ---
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+function toggleNotif() { document.getElementById('notifHub').classList.toggle('show'); }
 
+// SLIDER LOGIC
+let cur = 0; 
+const slides = document.querySelectorAll('.slide');
+if(slides.length > 0) {
+    setInterval(() => { 
+        slides[cur].classList.remove('active'); 
+        cur = (cur + 1) % slides.length; 
+        slides[cur].classList.add('active'); 
+    }, 5000);
+}
 
+// MODAL OPENER
+function openModal(title, college, date, time, fee, elig, venue, mode, link) {
+    document.getElementById('mTitle').innerText = title;
+    document.getElementById('mCollege').innerText = college + " • System Entry";
+    document.getElementById('mDate').innerText = date;
+    document.getElementById('mTime').innerText = time;
+    document.getElementById('mFee').innerText = fee;
+    document.getElementById('mElig').innerText = elig;
+    document.getElementById('mVenue').innerText = venue;
+    document.getElementById('mMode').innerText = mode;
+    document.getElementById('mOfficial').href = link;
+    document.getElementById('regModal').classList.remove('hidden');
+}
+function closeReg() { document.getElementById('regModal').classList.add('hidden'); }
 
-        // AUTH
-        const name = localStorage.getItem('sv_user_name') || "Alex";
-        document.getElementById('displayUserName').innerText = name;
-        document.getElementById('welcomeName').innerText = name;
-        document.getElementById('userInitial').innerText = name[0].toUpperCase();
-        document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0421";
-        
-        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+// --- 3. AI CHATBOT SYSTEM ---
+function toggleChat() { document.getElementById('chatWindow').classList.toggle('hidden'); }
+
+async function sendChat() {
+    const input = document.getElementById('chatInput');
+    const area = document.getElementById('chatArea');
+    if(!input || !input.value.trim()) return;
+
+    const userMsg = input.value.trim();
+    area.innerHTML += `<div class="flex justify-end"><div class="bg-indigo-600 p-2 rounded-xl text-xs max-w-[80%] shadow-lg">${userMsg}</div></div>`;
+    input.value = "";
+    area.scrollTop = area.scrollHeight;
+
+    const tId = "ai-" + Date.now();
+    area.innerHTML += `<div id="${tId}" class="bg-white/5 p-2 rounded-xl text-xs max-w-[50%] italic opacity-50">Thinking...</div>`;
+
+    try {
+        const response = await fetch(`${API_URL}/api/ai/chat`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: userMsg })
+        });
+        const data = await response.json();
+        document.getElementById(tId).remove();
+        area.innerHTML += `<div class="flex justify-start"><div class="bg-white/10 p-2 rounded-xl text-xs max-w-[80%] border border-white/5">${data.answer}</div></div>`;
+    } catch(e) {
+        document.getElementById(tId).innerText = "AI System offline.";
+    }
+    area.scrollTop = area.scrollHeight;
+}
+
+// --- 4. STARTUP ---
+const syncIdentity = () => {
+    const name = localStorage.getItem('sv_user_name') || "Student";
+    document.getElementById('displayUserName').innerText = name;
+    document.getElementById('welcomeName').innerText = name;
+    document.getElementById('userInitial').innerText = name[0].toUpperCase();
+    document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+}
+
+function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+
+window.onload = () => {
+    syncIdentity();
+    refreshDashboard();
+    // Auto-refresh notifications and data every 20 seconds
+    setInterval(refreshDashboard, 20000); 
+};
     </script>
 </body>
 </html>

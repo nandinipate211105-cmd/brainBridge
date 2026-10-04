@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -55,7 +55,6 @@
 </head>
 <body class="min-h-screen">
 
-    <!-- SIDEBAR (Unified) -->
     <div id="sidebarOverlay" class="sidebar-overlay fixed inset-0 z-[90]" onclick="toggleSidebar()"></div>
     <div id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-[#0f172a] border-r border-white/5 p-6 -translate-x-full z-[100] shadow-2xl">
         <div class="flex justify-between items-center mb-10">
@@ -87,10 +86,8 @@
         </nav>
     </div>
 
-<!-- HEADER SECTION -->
 <header class="fixed top-0 w-full nav-blur z-50 border-b border-white/5">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <!-- Left: Logo & Sidebar Toggle -->
         <div class="flex items-center gap-6">
             <button onclick="toggleSidebar()" class="text-2xl hover:text-indigo-400 transition">
                 <i class="fa-solid fa-bars-staggered"></i>
@@ -98,7 +95,6 @@
             <h1 class="text-2xl font-black tracking-tighter">Brain<span class="text-indigo-500">Bridge</span></h1>
         </div>
 
-        <!-- Right: User Profile with Dropdown -->
         <div class="relative group">
             <div class="flex items-center gap-4 cursor-pointer p-1 pr-3 rounded-2xl hover:bg-white/5 transition duration-300">
                 <div class="text-right hidden sm:block">
@@ -108,15 +104,12 @@
                 
                 <div class="relative">
                     <div id="userInitial" class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center font-black shadow-lg">U</div>
-                    <!-- Small Green Online Dot -->
                     <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 border-2 border-[#0f172a] rounded-full"></div>
                 </div>
 
-                <!-- Dropdown Arrow -->
                 <i class="fa-solid fa-chevron-down text-[10px] text-slate-500 group-hover:text-white transition-transform duration-300 group-hover:rotate-180"></i>
             </div>
 
-            <!-- THE DROPDOWN MENU -->
             <div class="absolute right-0 mt-2 w-56 bg-[#131c31] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[120] overflow-hidden backdrop-blur-xl">
                 <div class="p-4 border-b border-white/5 bg-white/5">
                     <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Account Hub</p>
@@ -144,7 +137,6 @@
 
     <main class="container mx-auto px-6 pt-32 pb-20">
         
-        <!-- TOP SECTION: FEEDBACK SHOWCASE -->
         <section class="mb-20">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-black tracking-tighter mb-4">Community <span class="text-indigo-500">Insights</span></h2>
@@ -153,15 +145,12 @@
 
             <div class="relative overflow-hidden group">
                 <div id="carousel" class="carousel-container" onmouseenter="pauseSlide()" onmouseleave="startSlide()">
-                    <!-- Carousel cards -->
                 </div>
             </div>
         </section>
 
-        <!-- BOTTOM SECTION: FORM + RATINGS -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             
-            <!-- LEFT: FORM -->
             <div class="glass-card p-10 border-l-4 border-indigo-500 shadow-2xl">
                 <h3 class="text-2xl font-bold mb-6 tracking-tight">Tell us your thoughts</h3>
                 <form id="feedbackForm" class="space-y-6">
@@ -177,7 +166,6 @@
                 </form>
             </div>
 
-            <!-- RIGHT: RATINGS -->
             <div class="flex flex-col items-center justify-center glass-card p-10 h-full text-center">
                 <h3 class="text-2xl font-bold mb-2">Rate StudentVerse</h3>
                 <p class="text-slate-500 mb-8 text-sm italic">Every star helps us grow.</p>
@@ -197,121 +185,291 @@
         </section>
     </main>
 
-    <!-- SUCCESS TOAST (THE REPLACEMENT FOR ALERT) -->
     <div id="thankYouToast">
         <i class="fa-solid fa-circle-check mr-2"></i> Thank you for your feedback!
     </div>
 
     <script>
-        // --- DUMMY DATA ---
-        const feedbackData = [
-            { name: "Rahul Sharma", college: "IIT Bombay", text: "StudentVerse made finding co-founders so easy. Highly recommend!", stars: 5 },
-            { name: "Priya Patel", college: "MIT Pune", text: "The cross-college events are a game changer for exposure.", stars: 4 },
-            { name: "Alex Rivera", college: "Stanford", text: "Clean UI and great networking features for developers.", stars: 5 },
-            { name: "Sneha Reddy", college: "VIT Vellore", text: "I finally found a design team from a different city!", stars: 5 },
-            { name: "Vikram Singh", college: "IIT Delhi", text: "Could use more features, but the concept is fantastic.", stars: 4 },
-            { name: "Anjali Menon", college: "IISc Bangalore", text: "Love the community vibe and the resources provided.", stars: 5 },
-            { name: "Rajesh Kumar", college: "IIT Madras", text: "A must-have platform for any student looking to collaborate.", stars: 5 },
-            { name: "Emily Davis", college: "Harvard", text: "The feedback section is a nice touch for continuous improvement.", stars: 4 },
-            { name: "Samuel Lee", college: "NUS Singapore", text: "Great for finding like-minded peers across colleges.", stars: 5 }
-        ];
+        // // --- DUMMY DATA ---
+        // const feedbackData = [
+        //     { name: "Rahul Sharma", college: "IIT Bombay", text: "StudentVerse made finding co-founders so easy. Highly recommend!", stars: 5 },
+        //     { name: "Priya Patel", college: "MIT Pune", text: "The cross-college events are a game changer for exposure.", stars: 4 },
+        //     { name: "Alex Rivera", college: "Stanford", text: "Clean UI and great networking features for developers.", stars: 5 },
+        //     { name: "Sneha Reddy", college: "VIT Vellore", text: "I finally found a design team from a different city!", stars: 5 },
+        //     { name: "Vikram Singh", college: "IIT Delhi", text: "Could use more features, but the concept is fantastic.", stars: 4 },
+        //     { name: "Anjali Menon", college: "IISc Bangalore", text: "Love the community vibe and the resources provided.", stars: 5 },
+        //     { name: "Rajesh Kumar", college: "IIT Madras", text: "A must-have platform for any student looking to collaborate.", stars: 5 },
+        //     { name: "Emily Davis", college: "Harvard", text: "The feedback section is a nice touch for continuous improvement.", stars: 4 },
+        //     { name: "Samuel Lee", college: "NUS Singapore", text: "Great for finding like-minded peers across colleges.", stars: 5 }
+        // ];
 
-        const carousel = document.getElementById('carousel');
-        let index = 0;
-        let slideTimer;
+        // const carousel = document.getElementById('carousel');
+        // let index = 0;
+        // let slideTimer;
 
-        function renderCarousel() {
-            carousel.innerHTML = feedbackData.map(fb => `
-                <div class="carousel-item">
-                    <div class="glass-card p-8 h-full flex flex-col justify-between border-t-4 border-indigo-500/30">
-                        <div>
-                            <div class="flex gap-1 text-amber-500 mb-4 text-xs">
-                                ${Array(fb.stars).fill('<i class="fa-solid fa-star"></i>').join('')}
-                            </div>
-                            <p class="text-slate-300 italic mb-6">"${fb.text}"</p>
-                        </div>
-                        <div class="flex items-center gap-4 border-t border-white/5 pt-4">
-                            <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center font-bold text-indigo-400">${fb.name[0]}</div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white">${fb.name}</h4>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">${fb.college}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+        // function renderCarousel() {
+        //     carousel.innerHTML = feedbackData.map(fb => `
+        //         <div class="carousel-item">
+        //             <div class="glass-card p-8 h-full flex flex-col justify-between border-t-4 border-indigo-500/30">
+        //                 <div>
+        //                     <div class="flex gap-1 text-amber-500 mb-4 text-xs">
+        //                         ${Array(fb.stars).fill('<i class="fa-solid fa-star"></i>').join('')}
+        //                     </div>
+        //                     <p class="text-slate-300 italic mb-6">"${fb.text}"</p>
+        //                 </div>
+        //                 <div class="flex items-center gap-4 border-t border-white/5 pt-4">
+        //                     <div class="w-10 h-10 rounded-full bg-indigo-600/20 flex items-center justify-center font-bold text-indigo-400">${fb.name[0]}</div>
+        //                     <div>
+        //                         <h4 class="font-bold text-sm text-white">${fb.name}</h4>
+        //                         <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">${fb.college}</p>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     `).join('');
+        // }
 
-        function startSlide() {
-            slideTimer = setInterval(() => {
-                index++;
-                const items = document.querySelectorAll('.carousel-item');
-                if (index > feedbackData.length - (window.innerWidth > 1024 ? 3 : 1)) index = 0;
-                const itemWidth = items[0].offsetWidth;
-                carousel.style.transform = `translateX(-${index * itemWidth}px)`;
-            }, 1500);
-        }
-        function pauseSlide() { clearInterval(slideTimer); }
+        // function startSlide() {
+        //     slideTimer = setInterval(() => {
+        //         index++;
+        //         const items = document.querySelectorAll('.carousel-item');
+        //         if (index > feedbackData.length - (window.innerWidth > 1024 ? 3 : 1)) index = 0;
+        //         const itemWidth = items[0].offsetWidth;
+        //         carousel.style.transform = `translateX(-${index * itemWidth}px)`;
+        //     }, 1500);
+        // }
+        // function pauseSlide() { clearInterval(slideTimer); }
 
-        // --- RATING LOGIC ---
-        let selectedRating = 0;
-        const stars = document.querySelectorAll('#starContainer i');
-        const statusText = document.getElementById('ratingStatus');
+        // // --- RATING LOGIC ---
+        // let selectedRating = 0;
+        // const stars = document.querySelectorAll('#starContainer i');
+        // const statusText = document.getElementById('ratingStatus');
 
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                selectedRating = star.getAttribute('data-value');
-                updateStars(selectedRating);
-                statusText.innerText = `You Rated: ${selectedRating} Stars`;
-            });
-            star.addEventListener('mouseover', () => updateStars(star.getAttribute('data-value')));
-            star.addEventListener('mouseleave', () => updateStars(selectedRating));
+        // stars.forEach(star => {
+        //     star.addEventListener('click', () => {
+        //         selectedRating = star.getAttribute('data-value');
+        //         updateStars(selectedRating);
+        //         statusText.innerText = `You Rated: ${selectedRating} Stars`;
+        //     });
+        //     star.addEventListener('mouseover', () => updateStars(star.getAttribute('data-value')));
+        //     star.addEventListener('mouseleave', () => updateStars(selectedRating));
+        // });
+
+        // function updateStars(val) {
+        //     stars.forEach(s => s.classList.toggle('active', s.getAttribute('data-value') <= val));
+        // }
+
+        // // --- UPDATED FORM SUBMISSION (NO ALERT) ---
+        // document.getElementById('feedbackForm').onsubmit = (e) => {
+        //     e.preventDefault();
+            
+        //     // Log Data
+        //     console.log("Submitted:", {
+        //         name: document.getElementById('fbName').value,
+        //         text: document.getElementById('fbText').value,
+        //         stars: selectedRating
+        //     });
+
+        //     // 1. Show Toast
+        //     const toast = document.getElementById('thankYouToast');
+        //     toast.classList.add('show');
+
+        //     // 2. Hide Toast after 3 seconds
+        //     setTimeout(() => {
+        //         toast.classList.remove('show');
+        //     }, 3000);
+
+        //     // 3. Reset UI
+        //     e.target.reset();
+        //     updateStars(0);
+        //     selectedRating = 0;
+        //     statusText.innerText = "Select Stars";
+        // };
+
+        // const userName = localStorage.getItem('sv_user_name') || "Student";
+        // document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
+        // document.getElementById('userInitial').innerText = userName[0].toUpperCase();
+        // function toggleSidebar() { 
+        //     const sb = document.getElementById('sidebar');
+        //     const overlay = document.getElementById('sidebarOverlay');
+        //     sb.classList.toggle('-translate-x-full'); 
+        //     overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+        // }
+        // function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
+
+        // renderCarousel();
+        // startSlide();
+
+
+        document.getElementById('feedbackForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+        name: document.getElementById('fbName').value,
+        text: document.getElementById('fbText').value,
+        stars: selectedRating 
+    };
+
+    await fetch('http://127.0.0.1:8000/api/feedback', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    });
+
+    const toast = document.getElementById('thankYouToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+    e.target.reset();
+};
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Hub | BrainBridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #6366f1; --bg-dark: #02020a; }
+        body { background: var(--bg-dark); color: white; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
+        .star-rating i { cursor: pointer; color: rgba(255,255,255,0.2); transition: 0.3s; }
+        .star-rating i.active { color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+        input, textarea { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
+        #thankYouToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); opacity: 0; transition: 0.5s ease; background: #6366f1; color: white; padding: 10px 40px; border-radius: 50px; font-weight: bold; }
+        #thankYouToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-md w-full bg-white/5 border border-white/10 p-10 rounded-[40px] backdrop-blur-3xl shadow-2xl">
+        <h2 class="text-3xl font-black text-center mb-2">Submit Voice</h2>
+        <p class="text-slate-500 text-center text-xs mb-8 uppercase tracking-widest font-bold">Feedback Protocol 1.0</p>
+
+        <form id="fbForm" class="space-y-6">
+            <div class="star-rating flex justify-center gap-4 text-3xl mb-8">
+                <i class="fa-solid fa-star" data-val="1"></i>
+                <i class="fa-solid fa-star" data-val="2"></i>
+                <i class="fa-solid fa-star" data-val="3"></i>
+                <i class="fa-solid fa-star" data-val="4"></i>
+                <i class="fa-solid fa-star" data-val="5"></i>
+            </div>
+
+            <input type="text" id="name" placeholder="Confirm Name" class="w-full p-4 rounded-2xl outline-none" required>
+            <textarea id="text" placeholder="Explain your experience..." class="w-full p-4 rounded-2xl outline-none h-32" required></textarea>
+            
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black uppercase text-xs tracking-widest transition-all">Execute Submission 🚀</button>
+        </form>
+    </div>
+
+    <div id="thankYouToast">Feedback stored in Hive!</div>
+
+    <script>
+        let score = 0;
+        const stars = document.querySelectorAll('.star-rating i');
+
+        stars.forEach(s => {
+            s.onclick = () => {
+                score = s.dataset.val;
+                stars.forEach((st, idx) => st.classList.toggle('active', idx < score));
+            };
         });
 
-        function updateStars(val) {
-            stars.forEach(s => s.classList.toggle('active', s.getAttribute('data-value') <= val));
-        }
-
-        // --- UPDATED FORM SUBMISSION (NO ALERT) ---
-        document.getElementById('feedbackForm').onsubmit = (e) => {
+        document.getElementById('fbForm').onsubmit = async (e) => {
             e.preventDefault();
-            
-            // Log Data
-            console.log("Submitted:", {
-                name: document.getElementById('fbName').value,
-                text: document.getElementById('fbText').value,
-                stars: selectedRating
+            if(score === 0) return alert("Select at least 1 star!");
+
+            const res = await fetch('http://127.0.0.1:8000/api/feedback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ 
+                    name: document.getElementById('name').value, 
+                    text: document.getElementById('text').value, 
+                    stars: parseInt(score) 
+                })
             });
 
-            // 1. Show Toast
-            const toast = document.getElementById('thankYouToast');
-            toast.classList.add('show');
-
-            // 2. Hide Toast after 3 seconds
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-
-            // 3. Reset UI
-            e.target.reset();
-            updateStars(0);
-            selectedRating = 0;
-            statusText.innerText = "Select Stars";
+            if(res.ok) {
+                const toast = document.getElementById('thankYouToast');
+                toast.className = 'show';
+                setTimeout(() => location.reload(), 2000);
+            }
         };
-
-        const userName = localStorage.getItem('sv_user_name') || "Student";
-        document.getElementById('displayUserId').innerText = localStorage.getItem('sv_user_id') || "ID_0000";
-        document.getElementById('userInitial').innerText = userName[0].toUpperCase();
-        function toggleSidebar() { 
-            const sb = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sb.classList.toggle('-translate-x-full'); 
-            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
-        }
-        function logout() { localStorage.clear(); window.location.href = 'signup.html'; }
-
-        renderCarousel();
-        startSlide();
     </script>
 </body>
 </html>
